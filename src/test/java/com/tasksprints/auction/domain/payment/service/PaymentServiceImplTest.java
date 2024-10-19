@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PaymentServiceImplTest {
-
     @InjectMocks
     private PaymentServiceImpl paymentService;
 
@@ -35,6 +34,7 @@ public class PaymentServiceImplTest {
         String orderId = "testOrderId";
         BigDecimal amount = BigDecimal.valueOf(1000.00);
         PaymentRequest.Prepare prepareRequest = new PaymentRequest.Prepare(orderId, amount);
+
         //when
         paymentService.prepare(session, prepareRequest);
         //then

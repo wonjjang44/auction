@@ -26,6 +26,15 @@ public class PaymentRequest {
         private BigDecimal amount;
     }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Confirm {
+        private String orderId;
+        private BigDecimal amount;
+        private String tossPaymentKey;
+    }
+
     public Payment toEntity() {
         return Payment.builder()
             .amount(amount)

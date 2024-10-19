@@ -20,7 +20,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#        default_batch_fetch_size: 100
+
     database-platform: org.hibernate.dialect.H2Dialect
   thymeleaf:
     enabled: true
@@ -29,6 +33,10 @@ spring:
     mode: HTML
     encoding: UTF-8
     cache: false
+
+  profiles:
+    include:
+      -payment
 
 springdoc:
   api-docs:
@@ -45,4 +53,5 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 server:
   port: 8080
+
 
