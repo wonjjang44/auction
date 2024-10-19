@@ -6,10 +6,14 @@ import com.tasksprints.auction.domain.user.dto.response.UserSummaryResponse;
 import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
 import com.tasksprints.auction.domain.user.model.User;
 import com.tasksprints.auction.domain.user.repository.UserRepository;
+import com.tasksprints.auction.domain.wallet.model.Wallet;
+import com.tasksprints.auction.domain.wallet.repository.WalletRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,12 +21,17 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final WalletRepository walletRepository;
 
+//    @Transactional
     @Override
     public UserDetailResponse createUser(UserRequest.Register request) {
         User user = User.create(request.getName(), request.getEmail(), request.getPassword(), request.getNickname());
-
         User newUser = userRepository.save(user);
+
+//        Wallet wallet = this.createWalletForUser(newUser);
+//        newUser.addWallet(wallet);
+        // walletRepository.save(wallet); cascade = CascadeType.PERSIST 옵션으로 처리
         return UserDetailResponse.of(newUser);
     }
 
@@ -58,5 +67,10 @@ public class UserServiceImpl implements UserService {
         user.delete(); // 사용자 상태를 '삭제됨'으로 변경
         userRepository.save(user); // 상태 업데이트를 저장
     }
+
+//    private Wallet createWalletForUser(User user) {
+//        return Optional.ofNullable(Wallet.create(user))
+//            .orElseThrow(() -> new WalletCreationException("Failed to create wallet for user: " + user.getEmail()));
+//    }
 
 }
