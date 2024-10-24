@@ -37,4 +37,4 @@ out/
 .vscode/
 
 # key yml
-!auction/src/main/resources/application-payment.yml
+auction/src/main/resources/application-payment.yml
