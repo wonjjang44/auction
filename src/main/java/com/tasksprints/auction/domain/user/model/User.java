@@ -2,6 +2,7 @@ package com.tasksprints.auction.domain.user.model;
 
 import com.tasksprints.auction.common.entity.BaseEntityWithUpdate;
 import com.tasksprints.auction.domain.auction.model.Auction;
+import com.tasksprints.auction.domain.wallet.model.Wallet;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
@@ -40,6 +41,11 @@ public class User extends BaseEntityWithUpdate {
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Auction> auctions = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
+
 //    추후 추가
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 //    @Builder.Default
