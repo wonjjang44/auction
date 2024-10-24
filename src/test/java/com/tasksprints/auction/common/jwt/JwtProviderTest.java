@@ -2,6 +2,9 @@ package com.tasksprints.auction.common.jwt;
 
 import com.tasksprints.auction.common.jwt.dto.response.JwtResponse;
 import io.jsonwebtoken.ExpiredJwtException;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,9 +20,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JwtProviderTest {
-
     @Mock
     private JwtProperties jwtProperties;
+    @Mock
+    private Clock clock;
     @InjectMocks
     private JwtProvider jwtProvider;
 
@@ -28,10 +32,12 @@ class JwtProviderTest {
     private final Long EXPIRED_EXPIRE_MS = 0L;
     private final String ISSUER = "testIssuer";
     private final String SECRET_KEY = "testSecretKey";
-
+    private final ZoneId ZONE_ID = ZoneId.of("Asia/Seoul");
 
     @BeforeEach
     public void setUp() {
+        when(clock.instant()).thenReturn(Instant.now());
+        when(clock.getZone()).thenReturn(ZONE_ID);
         when(jwtProperties.getIssuer()).thenReturn(ISSUER);
         when(jwtProperties.getSecretKey()).thenReturn(SECRET_KEY);
     }
@@ -88,9 +94,9 @@ class JwtProviderTest {
 
         String token = jwtProvider.createAccessToken(1L, "admin");
 
-        Assertions.assertThrows(ExpiredJwtException.class,
-            () -> { jwtProvider.verifyToken(token); },
-            "토큰이 즉시 만료되어야 합니다.");
+        Assertions.assertThrows(ExpiredJwtException.class, () -> {
+            jwtProvider.verifyToken(token);
+        }, "토큰이 즉시 만료되어야 합니다.");
     }
 
     @Test
