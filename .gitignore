@@ -36,5 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-# key yml
-auction/src/main/resources/application-payment.yml
+# payment yml
+/src/main/resources/application-payment.yml
