@@ -48,14 +48,14 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     //Spring
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
     //Junit
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // querydsl
-    implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
-    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
@@ -70,6 +70,9 @@ dependencies {
 
     //thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    implementation group: 'org.json', name: 'json', version: '20240303'
+
 }
 
 tasks.named('test') {
