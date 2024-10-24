@@ -8,19 +8,18 @@ import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
 import com.tasksprints.auction.domain.payment.exception.InvalidSessionException;
 import com.tasksprints.auction.domain.payment.exception.PaymentDataMismatchException;
+import com.tasksprints.auction.domain.payment.exception.PaymentDetailSearchFailException;
 import com.tasksprints.auction.domain.payment.service.PaymentService;
 import com.tasksprints.auction.domain.user.repository.UserRepository;
 import com.tasksprints.auction.domain.user.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -81,6 +80,53 @@ public class PaymentController {
         }
         return null;
     }
+
+
+    @PostMapping("/success")
+    public ResponseEntity<?> paymentRequestSuccess(@RequestBody PaymentRequest.Confirm paymentRequest) {
+        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_PREPARED_SUCCESS, paymentRequest));
+    }
+
+
+    @PostMapping("/detail/key/{paymentKey}")
+    @Operation(summary = "paymenyKey를 사용한 결제 상세 조회 API 호출", description = "paymentKey를 사용하여 결제 정보 상세 조회 API를 호출한다")
+    @ApiResponse(responseCode = "200", description = "paymentKey를 사용한 결제 상세 조회 API 호출 성공")
+//    public ResponseEntity<?> detailPaymentUsePaymentKey(@Parameter(description = "paymentKey 값") @PathVariable(name="paymentKey") String key) {
+    public ResponseEntity<?> detailPaymentUsePaymentKey(@Parameter(description = "paymentKey 값") @RequestBody PaymentRequest.Detail paymentRequest) {
+        Object payment;
+
+        try {
+            // Service 단에서 호출한 tosspayments API 로직 호출
+            payment = paymentService.detailPayments(paymentRequest);
+            System.out.println("payment = " + payment);
+
+        } catch (IOException | InterruptedException e) {
+            throw new PaymentDetailSearchFailException("결제 상세 정보 조회 실패");
+        }
+
+        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_DETAIL_SUCCESS, payment));
+    }
+
+
+    @PostMapping("/detail/id/{orderId}")
+    @Operation(summary = "orderId를 사용한 결제 상세 조회 API 호출", description = "orderId를 사용하여 결제 정보 상세 조회 API를 호출한다")
+    @ApiResponse(responseCode = "200", description = "orderId를 사용한 결제 상세 조회 API 호출 성공")
+    public ResponseEntity<?> detailPaymentUseOrderId(@Parameter(description = "paymentKey 값") @RequestBody PaymentRequest.Detail paymentRequest) {
+        Object payment;
+
+        try {
+            // Service 단에서 호출한 tosspayments API 로직 호출
+            payment = paymentService.detailPayments(paymentRequest);
+            System.out.println("payment = " + payment);
+
+        } catch (IOException | InterruptedException e) {
+            throw new PaymentDetailSearchFailException("결제 상세 정보 조회 실패");
+        }
+
+        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_DETAIL_SUCCESS, payment));
+    }
+
+
 
     private void validatePaymentConfirmRequest(PaymentRequest.Confirm confirmRequest, HttpSession session){
         String savedOrderId = (String) session.getAttribute("orderId");

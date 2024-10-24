@@ -12,4 +12,6 @@ public interface PaymentService {
 
     public void prepare(HttpSession session, PaymentRequest.Prepare prepareRequest);
     public HttpResponse<String> requestConfirm(HttpClient httpClient, PaymentRequest.Confirm confirmRequest) throws IOException, InterruptedException;
+
+    Object detailPayments(PaymentRequest.Detail paymentRequest) throws IOException, InterruptedException;
 }

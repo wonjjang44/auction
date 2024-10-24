@@ -35,6 +35,17 @@ public class PaymentRequest {
         private String tossPaymentKey;
     }
 
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    public static class Detail {
+        private String paymentKey;
+        private String orderId;
+    }
+
+
     public Payment toEntity() {
         return Payment.builder()
             .amount(amount)
