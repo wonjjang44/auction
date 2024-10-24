@@ -34,8 +34,12 @@ spring:
     encoding: UTF-8
     cache: false
 
-  profiles:
-    include: -payment
+#  profiles:
+#    include: -payment
+#    active: dev
+
+  config:
+    import: classpath:application-payment.yml
 
 springdoc:
   api-docs:
