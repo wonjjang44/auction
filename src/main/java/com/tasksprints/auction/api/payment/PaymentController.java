@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,16 @@ public class PaymentController {
         paymentService.prepare(session, prepareRequest);
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_PREPARED_SUCCESS));
     }
+
+
+    @PostMapping("/success")
+    public ResponseEntity<?> getPaymentParams(@RequestBody PaymentRequest.Confirm paymentRequest) {
+        System.out.println("paymentRequest = " + paymentRequest);
+        System.out.println("paymentRequest = " + paymentRequest.getTossPaymentKey());
+
+        return ResponseEntity.status(HttpStatus.OK).body(paymentRequest);
+    }
+
 
     @Transactional
     @PostMapping("/confirm")
@@ -82,27 +93,13 @@ public class PaymentController {
     }
 
 
-    @PostMapping("/success")
-    public ResponseEntity<?> paymentRequestSuccess(@RequestBody PaymentRequest.Confirm paymentRequest) {
-        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_PREPARED_SUCCESS, paymentRequest));
-    }
-
-
     @PostMapping("/detail/key/{paymentKey}")
     @Operation(summary = "paymenyKey를 사용한 결제 상세 조회 API 호출", description = "paymentKey를 사용하여 결제 정보 상세 조회 API를 호출한다")
     @ApiResponse(responseCode = "200", description = "paymentKey를 사용한 결제 상세 조회 API 호출 성공")
-//    public ResponseEntity<?> detailPaymentUsePaymentKey(@Parameter(description = "paymentKey 값") @PathVariable(name="paymentKey") String key) {
     public ResponseEntity<?> detailPaymentUsePaymentKey(@Parameter(description = "paymentKey 값") @RequestBody PaymentRequest.Detail paymentRequest) {
-        Object payment;
-
-        try {
-            // Service 단에서 호출한 tosspayments API 로직 호출
-            payment = paymentService.detailPayments(paymentRequest);
-            System.out.println("payment = " + payment);
-
-        } catch (IOException | InterruptedException e) {
-            throw new PaymentDetailSearchFailException("결제 상세 정보 조회 실패");
-        }
+        // Service 단에서 호출한 tosspayments API 로직 호출
+        PaymentResponse.Detail payment = paymentService.detailPayments(paymentRequest);
+        System.out.println("payment = " + payment);
 
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_DETAIL_SUCCESS, payment));
     }
@@ -111,17 +108,10 @@ public class PaymentController {
     @PostMapping("/detail/id/{orderId}")
     @Operation(summary = "orderId를 사용한 결제 상세 조회 API 호출", description = "orderId를 사용하여 결제 정보 상세 조회 API를 호출한다")
     @ApiResponse(responseCode = "200", description = "orderId를 사용한 결제 상세 조회 API 호출 성공")
-    public ResponseEntity<?> detailPaymentUseOrderId(@Parameter(description = "paymentKey 값") @RequestBody PaymentRequest.Detail paymentRequest) {
-        Object payment;
-
-        try {
-            // Service 단에서 호출한 tosspayments API 로직 호출
-            payment = paymentService.detailPayments(paymentRequest);
-            System.out.println("payment = " + payment);
-
-        } catch (IOException | InterruptedException e) {
-            throw new PaymentDetailSearchFailException("결제 상세 정보 조회 실패");
-        }
+    public ResponseEntity<?> detailPaymentUseOrderId(@Parameter(description = "orderId 값") @RequestBody PaymentRequest.Detail paymentRequest) {
+        // Service 단에서 호출한 tosspayments API 로직 호출
+        PaymentResponse.Detail payment = paymentService.detailPayments(paymentRequest);
+        System.out.println("payment = " + payment);
 
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_DETAIL_SUCCESS, payment));
     }
