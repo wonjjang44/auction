@@ -53,13 +53,16 @@ public class User extends BaseEntityWithUpdate {
     /**
      * @descripton static factory pattern을 적용하여, 구현
      */
-    public static User create(String name, String email, String password, String nickName) {
-        return User.builder()
+    public static User createWithWallet(String name, String email, String password, String nickName) {
+        User user = User.builder()
             .name(name)
             .email(email)
             .password(password)
             .nickName(nickName)
             .build();
+        Wallet wallet = Wallet.create(user);
+        user.addWallet(wallet);
+        return user;
     }
 //    public Wallet createWalletForUser(User user) {
 //        Wallet wallet = new Wallet();

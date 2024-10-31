@@ -27,11 +27,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDetailResponse createUser(UserRequest.Register request) {
-        User user = User.create(request.getName(), request.getEmail(), request.getPassword(), request.getNickname());
-        Wallet wallet = this.createWalletForUser(user);
-        user.addWallet(wallet);
+        User user = User.createWithWallet(request.getName(), request.getEmail(), request.getPassword(), request.getNickname());
         User newUser = userRepository.save(user);
-        // walletRepository.save(wallet); cascade = CascadeType.ALL 옵션으로 처리
         return UserDetailResponse.of(newUser);
     }
 
@@ -73,9 +70,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
     }
 
-    private Wallet createWalletForUser(User user) {
-        return Optional.ofNullable(Wallet.create(user))
-            .orElseThrow(() -> new WalletCreationException("Failed to create wallet for user: " + user.getEmail()));
-    }
+//    private Wallet createWalletForUser(User user) {
+//        return Optional.ofNullable(Wallet.create(user))
+//            .orElseThrow(() -> new WalletCreationException("Failed to create wallet for user: " + user.getEmail()));
+//    }
 
 }
