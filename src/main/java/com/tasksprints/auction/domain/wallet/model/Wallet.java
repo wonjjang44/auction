@@ -42,6 +42,7 @@ public class Wallet extends BaseEntityWithUpdate {
     public static Wallet create(User user) {
         return Wallet
             .builder()
+            .balance(BigDecimal.ZERO)
             .userName(user.getName())
             .user(user)
             .build();
@@ -52,5 +53,9 @@ public class Wallet extends BaseEntityWithUpdate {
 
     public void addUser(User user) {
         this.user = user;
+    }
+
+    public void chargeBalance(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
     }
 }
