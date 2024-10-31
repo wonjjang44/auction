@@ -15,6 +15,7 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public void chargeMoney(Wallet wallet, BigDecimal amount) {
         wallet.chargeBalance(amount);
+        walletRepository.save(wallet);
     }
 
     @Override

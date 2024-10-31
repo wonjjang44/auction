@@ -1,15 +1,21 @@
 package com.tasksprints.auction.domain.payment.dto.response;
 
-import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+
+import java.math.BigDecimal;
+@Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PaymentResponse {
+    @JsonProperty("method")
     private String payType;
+    private String paymentKey;
+    @JsonProperty("totalAmount")
     private BigDecimal amount;
     private String orderName;
     private String orderId;
-    private String customerEmail;
-    private String customerName;
-    private String successUrl;
-    private String failUrl;
+    private String status;
 
 }

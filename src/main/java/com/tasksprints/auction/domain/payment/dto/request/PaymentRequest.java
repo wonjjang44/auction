@@ -15,8 +15,6 @@ public class PaymentRequest {
     private String orderId;
     private String orderName;
     private PayType payType;
-//    private String successUrl;
-//    private String failUrl;
 
     @Getter
     @AllArgsConstructor
@@ -32,7 +30,7 @@ public class PaymentRequest {
     public static class Confirm {
         private String orderId;
         private BigDecimal amount;
-        private String tossPaymentKey;
+        private String paymentKey;
     }
 
     public Payment toEntity() {
