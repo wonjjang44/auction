@@ -42,7 +42,7 @@ public class User extends BaseEntityWithUpdate {
     @Builder.Default
     private List<Auction> auctions = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 //    추후 추가
@@ -61,6 +61,11 @@ public class User extends BaseEntityWithUpdate {
             .nickName(nickName)
             .build();
     }
+//    public Wallet createWalletForUser(User user) {
+//        Wallet wallet = new Wallet();
+//        wallet.setUser(user);
+//        return wallet;
+//    }
 
     public void setAuctions(List<Auction> auctions) {
         this.auctions = auctions;

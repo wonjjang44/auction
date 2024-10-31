@@ -6,6 +6,7 @@ import com.tasksprints.auction.domain.user.dto.response.UserSummaryResponse;
 import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
 import com.tasksprints.auction.domain.user.model.User;
 import com.tasksprints.auction.domain.user.repository.UserRepository;
+import com.tasksprints.auction.domain.wallet.exception.WalletCreationException;
 import com.tasksprints.auction.domain.wallet.model.Wallet;
 import com.tasksprints.auction.domain.wallet.repository.WalletRepository;
 import jakarta.transaction.Transactional;
@@ -23,15 +24,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final WalletRepository walletRepository;
 
-//    @Transactional
+    @Transactional
     @Override
     public UserDetailResponse createUser(UserRequest.Register request) {
         User user = User.create(request.getName(), request.getEmail(), request.getPassword(), request.getNickname());
+        Wallet wallet = this.createWalletForUser(user);
+        user.addWallet(wallet);
         User newUser = userRepository.save(user);
-
-//        Wallet wallet = this.createWalletForUser(newUser);
-//        newUser.addWallet(wallet);
-        // walletRepository.save(wallet); cascade = CascadeType.PERSIST 옵션으로 처리
+        // walletRepository.save(wallet); cascade = CascadeType.ALL 옵션으로 처리
         return UserDetailResponse.of(newUser);
     }
 
@@ -68,9 +68,14 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user); // 상태 업데이트를 저장
     }
 
-//    private Wallet createWalletForUser(User user) {
-//        return Optional.ofNullable(Wallet.create(user))
-//            .orElseThrow(() -> new WalletCreationException("Failed to create wallet for user: " + user.getEmail()));
-//    }
+    @Override
+    public User findUserById(Long id){
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+    }
+
+    private Wallet createWalletForUser(User user) {
+        return Optional.ofNullable(Wallet.create(user))
+            .orElseThrow(() -> new WalletCreationException("Failed to create wallet for user: " + user.getEmail()));
+    }
 
 }
