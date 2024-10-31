@@ -34,4 +34,5 @@ public class ApiResponseMessages {
 
     // PAYMENT
     public static final String PAYMENT_PREPARED_SUCCESS = "Payment prepared successfully";
+    public static final String PAYMENT_SUCCESS = "Payment completed and wallet charged successfully";
 }

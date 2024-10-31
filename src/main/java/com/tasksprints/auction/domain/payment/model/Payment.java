@@ -1,6 +1,7 @@
 package com.tasksprints.auction.domain.payment.model;
 
 import com.tasksprints.auction.common.entity.BaseEntityWithUpdate;
+import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
 import com.tasksprints.auction.domain.wallet.model.Wallet;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,6 +52,17 @@ public class Payment extends BaseEntityWithUpdate {
 
     @Column(nullable = true)
     private String cancelReason;
+
+    public static Payment create(PaymentResponse paymentResponse) {
+        return Payment.builder()
+            .tossOrderId(paymentResponse.getOrderId())
+            .tossPaymentKey(paymentResponse.getPaymentKey())
+            .orderName(paymentResponse.getOrderName())
+            .payType(PayType.fromString(paymentResponse.getPayType()))
+            .payStatus(PayStatus.fromString(paymentResponse.getStatus()))
+            .amount(paymentResponse.getAmount())
+            .build();
+    }
 
     public void addWallet(Wallet wallet) {
         this.wallet = wallet;
