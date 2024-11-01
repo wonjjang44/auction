@@ -1,4 +1,4 @@
-package com.tasksprints.auction.common.jwt.dto.response;
+package com.tasksprints.auction.domain.auth.dto.response;
 
 import lombok.*;
 
