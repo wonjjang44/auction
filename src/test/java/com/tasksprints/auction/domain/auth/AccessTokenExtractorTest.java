@@ -1,8 +1,11 @@
 package com.tasksprints.auction.domain.auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.tasksprints.auction.domain.auth.exception.AccessTokenException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,10 +23,11 @@ class AccessTokenExtractorTest {
     @DisplayName("헤더에서 access token 을 꺼낸다")
     void testExtractToken_success() {
         // given
-        String header = "Bearer token";
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getHeader("Authorization")).thenReturn("Bearer token");
 
         // when
-        String accessToken = tokenExtractor.extractToken(header);
+        String accessToken = tokenExtractor.extractToken(request);
 
         // then
         assertThat(accessToken).isEqualTo("token");
@@ -33,11 +37,12 @@ class AccessTokenExtractorTest {
     @DisplayName("access token 이 존재하지 않으면 예외를 반환한다")
     void testExtractToken_fail() {
         // given
-        String header = "no token";
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getHeader("Authorization")).thenReturn("notoken");
 
         // when, then
         Assertions.assertThrows(AccessTokenException.class, () -> {
-            tokenExtractor.extractToken(header);
+            tokenExtractor.extractToken(request);
         });
     }
 }
