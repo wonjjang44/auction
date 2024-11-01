@@ -1,6 +1,6 @@
 package com.tasksprints.auction.common.jwt;
 
-import com.tasksprints.auction.domain.auth.dto.response.JwtResponse;
+import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.time.Clock;
 import java.time.Instant;
@@ -53,7 +53,7 @@ class JwtProviderTest {
     @Test
     @DisplayName("token generator 을 통한 access token, refresh token 발급 테스트")
     void generateToken() {
-        JwtResponse jwtResponse = jwtProvider.generateToken(1L, "admin");
+        UserTokens jwtResponse = jwtProvider.generateToken(1L, "admin");
 
         assertNotNull(jwtResponse.getAccessToken(), "access token 이 발급되어야 합니다.");
         assertNotNull(jwtResponse.getRefreshToken(), "refresh token 이 발급되어야 합니다.");

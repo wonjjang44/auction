@@ -2,7 +2,7 @@ package com.tasksprints.auction.common.jwt;
 
 import static com.tasksprints.auction.common.util.TimeUtil.*;
 
-import com.tasksprints.auction.domain.auth.dto.response.JwtResponse;
+import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,12 +16,11 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
-
     private final JwtConfig jwtConfig;
     private final Clock clock;
 
-    public JwtResponse generateToken(Long userId, String userRole) {
-        return JwtResponse.of(createAccessToken(userId, userRole), createRefreshToken());
+    public UserTokens generateToken(Long userId, String userRole) {
+        return UserTokens.of(createAccessToken(userId, userRole), createRefreshToken());
     }
 
     public String createAccessToken(Long userId, String userRole) {

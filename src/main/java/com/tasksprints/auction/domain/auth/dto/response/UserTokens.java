@@ -2,16 +2,15 @@ package com.tasksprints.auction.domain.auth.dto.response;
 
 import lombok.*;
 
-@Data
+@Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class JwtResponse {
+public class UserTokens {
     private String refreshToken;
     private String accessToken;
 
-    public static JwtResponse of(String accessToken, String refreshToken) {
-        return JwtResponse.builder()
+    public static UserTokens of(String accessToken, String refreshToken) {
+        return UserTokens.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
             .build();
