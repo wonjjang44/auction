@@ -6,12 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-public class JwtProperties {
-    @Value("${jwt.header}")
-    private String header;
-
-    @Value("${jwt.prefix}")
-    private String prefix;
+public class JwtConfig {
 
     @Value("${jwt.expire-ms}")
     private Long expireMs;

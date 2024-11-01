@@ -17,7 +17,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    private final JwtProperties jwtProperties;
+    private final JwtConfig jwtConfig;
     private final Clock clock;
 
     public JwtResponse generateToken(Long userId, String userRole) {
@@ -28,18 +28,18 @@ public class JwtProvider {
 
         Date now = localDateTimeToDate(LocalDateTime.now(clock));
 
-        return Jwts.builder().setIssuer(jwtProperties.getIssuer()).claim("userId", userId).claim("userRole", userRole)
-            .setIssuedAt(now).setExpiration(new Date(now.getTime() + jwtProperties.getExpireMs()))
-            .signWith(SignatureAlgorithm.HS256, JwtUtil.encodeSecretKey(jwtProperties.getSecretKey())).compact();
+        return Jwts.builder().setIssuer(jwtConfig.getIssuer()).claim("userId", userId).claim("userRole", userRole)
+            .setIssuedAt(now).setExpiration(new Date(now.getTime() + jwtConfig.getExpireMs()))
+            .signWith(SignatureAlgorithm.HS256, JwtUtil.encodeSecretKey(jwtConfig.getSecretKey())).compact();
     }
 
     public String createRefreshToken() {
 
         Date now = localDateTimeToDate(LocalDateTime.now(clock));
 
-        return Jwts.builder().setIssuer(jwtProperties.getIssuer()).setIssuedAt(now)
-            .setExpiration(new Date(now.getTime() + jwtProperties.getRefreshExpireMs()))
-            .signWith(SignatureAlgorithm.HS256, JwtUtil.encodeSecretKey(jwtProperties.getSecretKey())).compact();
+        return Jwts.builder().setIssuer(jwtConfig.getIssuer()).setIssuedAt(now)
+            .setExpiration(new Date(now.getTime() + jwtConfig.getRefreshExpireMs()))
+            .signWith(SignatureAlgorithm.HS256, JwtUtil.encodeSecretKey(jwtConfig.getSecretKey())).compact();
     }
 
     public boolean verifyToken(String token) {
@@ -52,7 +52,7 @@ public class JwtProvider {
     }
 
     public Claims getClaims(String token) {
-        return Jwts.parser().setSigningKey(JwtUtil.encodeSecretKey(jwtProperties.getSecretKey()))
+        return Jwts.parser().setSigningKey(JwtUtil.encodeSecretKey(jwtConfig.getSecretKey()))
             .parseClaimsJws(token)
             .getBody();
     }

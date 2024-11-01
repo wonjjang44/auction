@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class JwtProviderTest {
     @Mock
-    private JwtProperties jwtProperties;
+    private JwtConfig jwtConfig;
     @Mock
     private Clock clock;
     @InjectMocks
@@ -38,16 +38,16 @@ class JwtProviderTest {
     public void setUp() {
         when(clock.instant()).thenReturn(Instant.now());
         when(clock.getZone()).thenReturn(ZONE_ID);
-        when(jwtProperties.getIssuer()).thenReturn(ISSUER);
-        when(jwtProperties.getSecretKey()).thenReturn(SECRET_KEY);
+        when(jwtConfig.getIssuer()).thenReturn(ISSUER);
+        when(jwtConfig.getSecretKey()).thenReturn(SECRET_KEY);
     }
 
     private void stubAccessTokenExpiration(Long expireMs) {
-        when(jwtProperties.getExpireMs()).thenReturn(expireMs);
+        when(jwtConfig.getExpireMs()).thenReturn(expireMs);
     }
 
     private void stubRefreshTokenExpiration(Long expireMs) {
-        when(jwtProperties.getRefreshExpireMs()).thenReturn(expireMs);
+        when(jwtConfig.getRefreshExpireMs()).thenReturn(expireMs);
     }
 
     @Test
