@@ -2,6 +2,7 @@ package com.tasksprints.auction.common.jwt;
 
 import static com.tasksprints.auction.common.util.TimeUtil.*;
 
+import com.tasksprints.auction.common.config.JwtConfig;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;

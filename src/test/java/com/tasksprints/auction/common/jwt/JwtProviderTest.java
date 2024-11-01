@@ -1,5 +1,6 @@
 package com.tasksprints.auction.common.jwt;
 
+import com.tasksprints.auction.common.config.JwtConfig;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.time.Clock;

@@ -1,4 +1,4 @@
-package com.tasksprints.auction.common.jwt;
+package com.tasksprints.auction.common.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
