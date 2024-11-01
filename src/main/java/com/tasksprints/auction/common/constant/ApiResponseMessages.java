@@ -32,6 +32,7 @@ public class ApiResponseMessages {
 
     // AUTH
     public static final String ACCESS_TOKEN_NOT_FOUND = "Access token Not found";
+    public static final String REFRESH_TOKEN_NOT_FOUND = "Refresh token not found";
 
     // Additional messages can be defined as needed
 }
