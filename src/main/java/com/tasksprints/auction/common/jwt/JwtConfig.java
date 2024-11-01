@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class JwtConfig {
 
     @Value("${jwt.expire-ms}")
-    private Long expireMs;
+    private Long accessExpireMs;
 
     @Value("${jwt.expire-ms}")
     private Long refreshExpireMs;

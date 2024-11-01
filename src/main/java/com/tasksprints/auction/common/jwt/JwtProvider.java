@@ -4,6 +4,8 @@ import static com.tasksprints.auction.common.util.TimeUtil.*;
 
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.Clock;
@@ -16,43 +18,46 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+    private static final String EMPTY_SUBJECT = "";
     private final JwtConfig jwtConfig;
     private final Clock clock;
 
-    public UserTokens generateToken(Long userId, String userRole) {
-        return UserTokens.of(createAccessToken(userId, userRole), createRefreshToken());
+    public UserTokens generateToken(String subject) {
+        return UserTokens.of(
+            createToken(subject, jwtConfig.getAccessExpireMs()),
+            createToken(EMPTY_SUBJECT, jwtConfig.getRefreshExpireMs())
+        );
     }
 
-    public String createAccessToken(Long userId, String userRole) {
-
+    private String createToken(String subject, Long expiredMs) {
+        byte[] secretKey = JwtUtil.encodeSecretKey(jwtConfig.getSecretKey());
         Date now = localDateTimeToDate(LocalDateTime.now(clock));
+        Date expirationTime = new Date(now.getTime() + expiredMs);
 
-        return Jwts.builder().setIssuer(jwtConfig.getIssuer()).claim("userId", userId).claim("userRole", userRole)
-            .setIssuedAt(now).setExpiration(new Date(now.getTime() + jwtConfig.getExpireMs()))
-            .signWith(SignatureAlgorithm.HS256, JwtUtil.encodeSecretKey(jwtConfig.getSecretKey())).compact();
+        return Jwts.builder()
+            .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+            .setIssuer(jwtConfig.getIssuer())
+            .setSubject(subject)
+            .setIssuedAt(now)
+            .setExpiration(expirationTime)
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .compact();
     }
 
-    public String createRefreshToken() {
-
-        Date now = localDateTimeToDate(LocalDateTime.now(clock));
-
-        return Jwts.builder().setIssuer(jwtConfig.getIssuer()).setIssuedAt(now)
-            .setExpiration(new Date(now.getTime() + jwtConfig.getRefreshExpireMs()))
-            .signWith(SignatureAlgorithm.HS256, JwtUtil.encodeSecretKey(jwtConfig.getSecretKey())).compact();
+    public void validateToken(String token) {
+        parseToken(token);
     }
 
-    public boolean verifyToken(String token) {
-
-        Date now = localDateTimeToDate(LocalDateTime.now(clock));
-
-        Claims claims = getClaims(token);
-
-        return !claims.getExpiration().before(now);
+    public String getSubject(String token) {
+        return parseToken(token)
+            .getBody()
+            .getSubject();
     }
 
-    public Claims getClaims(String token) {
-        return Jwts.parser().setSigningKey(JwtUtil.encodeSecretKey(jwtConfig.getSecretKey()))
-            .parseClaimsJws(token)
-            .getBody();
+    private Jws<Claims> parseToken(String token) {
+        byte[] secretKey = JwtUtil.encodeSecretKey(jwtConfig.getSecretKey());
+        return Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token);
     }
 }

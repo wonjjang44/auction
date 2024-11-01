@@ -43,7 +43,7 @@ class JwtProviderTest {
     }
 
     private void stubAccessTokenExpiration(Long expireMs) {
-        when(jwtConfig.getExpireMs()).thenReturn(expireMs);
+        when(jwtConfig.getAccessExpireMs()).thenReturn(expireMs);
     }
 
     private void stubRefreshTokenExpiration(Long expireMs) {
@@ -51,64 +51,66 @@ class JwtProviderTest {
     }
 
     @Test
-    @DisplayName("token generator 을 통한 access token, refresh token 발급 테스트")
+    @DisplayName("accessToken과 refreshToken을 발급해야한다.")
     void generateToken() {
-        UserTokens jwtResponse = jwtProvider.generateToken(1L, "admin");
+        // when
+        UserTokens userTokens = jwtProvider.generateToken("1L");
 
-        assertNotNull(jwtResponse.getAccessToken(), "access token 이 발급되어야 합니다.");
-        assertNotNull(jwtResponse.getRefreshToken(), "refresh token 이 발급되어야 합니다.");
+        // then
+        assertNotNull(userTokens.getAccessToken(), "access token 이 발급되어야 합니다.");
+        assertNotNull(userTokens.getRefreshToken(), "refresh token 이 발급되어야 합니다.");
     }
 
     @Test
-    @DisplayName("access token 발급 테스트")
-    void createAccessToken() {
-        stubAccessTokenExpiration(VALID_EXPIRE_MS);
-
-        String token = jwtProvider.createAccessToken(1L, "admin");
-
-        assertNotNull(token, "access token 이 발급되어야 합니다.");
-    }
-
-    @Test
-    @DisplayName("refresh token 발급 테스트")
-    void createRefreshToken() {
-        stubRefreshTokenExpiration(REFRESH_EXPIRE_MS);
-        String token = jwtProvider.createRefreshToken();
-        assertNotNull(token, "refresh token 이 발급되어야 합니다.");
-    }
-
-    @Test
-    @DisplayName("유효한 토큰 테스트")
+    @DisplayName("유효기간에는 토큰이 유효해야한다.")
     void verifyToken_valid() {
+        // given
         stubAccessTokenExpiration(VALID_EXPIRE_MS);
+        stubRefreshTokenExpiration(REFRESH_EXPIRE_MS);
 
-        String token = jwtProvider.createAccessToken(1L, "admin");
+        // when
+        UserTokens userTokens = jwtProvider.generateToken("1L");
 
-        Assertions.assertTrue(jwtProvider.verifyToken(token));
+        // then
+        Assertions.assertDoesNotThrow(() -> {
+            jwtProvider.validateToken(userTokens.getAccessToken());
+        });
+        Assertions.assertDoesNotThrow(() -> {
+            jwtProvider.validateToken(userTokens.getRefreshToken());
+        });
     }
 
     @Test
-    @DisplayName("만료된 토큰 테스트")
+    @DisplayName("유효기간이 지나면, 토큰 만료 예외를 반환해야한다")
     void verifyToken_expired() {
+        // given
         stubAccessTokenExpiration(EXPIRED_EXPIRE_MS);
+        stubRefreshTokenExpiration(EXPIRED_EXPIRE_MS);
 
-        String token = jwtProvider.createAccessToken(1L, "admin");
+        // when
+        UserTokens userTokens = jwtProvider.generateToken("1L");
+
+        // then
+        Assertions.assertThrows(ExpiredJwtException.class, () -> {
+            jwtProvider.validateToken(userTokens.getRefreshToken());
+        }, "리프레시토큰이 즉시 만료되어야 합니다.");
 
         Assertions.assertThrows(ExpiredJwtException.class, () -> {
-            jwtProvider.verifyToken(token);
-        }, "토큰이 즉시 만료되어야 합니다.");
+            jwtProvider.validateToken(userTokens.getAccessToken());
+        }, "액세스토큰이 즉시 만료되어야 합니다.");
     }
 
     @Test
     @DisplayName("디코딩 된 페이로드 정확성 테스트")
     void getClaims() {
+        // given
         stubAccessTokenExpiration(VALID_EXPIRE_MS);
+        UserTokens userTokens = jwtProvider.generateToken("1L");
 
-        String token = jwtProvider.createAccessToken(1L, "admin");
-        Long decodedUserId = jwtProvider.getClaims(token).get("userId", Long.class);
-        String decodedUserRole = jwtProvider.getClaims(token).get("userRole", String.class);
+        // when
+        String decodedUserId = jwtProvider.getSubject(userTokens.getAccessToken());
 
-        assertThat(decodedUserId).isEqualTo(1L);
-        assertThat(decodedUserRole).isEqualTo("admin");
+        // then
+        assertThat(decodedUserId).isEqualTo("1L");
     }
 }
