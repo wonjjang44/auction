@@ -1,22 +1,24 @@
 package com.tasksprints.auction.common.config;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @Getter
+@RequiredArgsConstructor
 public class JwtConfig {
 
     @Value("${jwt.expire-ms}")
-    private Long accessExpireMs;
+    private final Long accessExpireMs;
 
     @Value("${jwt.expire-ms}")
-    private Long refreshExpireMs;
+    private final Long refreshExpireMs;
 
     @Value("${jwt.issuer}")
-    private String issuer;
+    private final String issuer;
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private final String secretKey;
 }

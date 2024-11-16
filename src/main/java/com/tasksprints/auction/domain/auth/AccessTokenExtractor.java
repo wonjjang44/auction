@@ -4,10 +4,11 @@ import static com.tasksprints.auction.common.constant.ApiResponseMessages.ACCESS
 
 import com.tasksprints.auction.domain.auth.exception.AccessTokenException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-
+@Qualifier("accessTokenExtractor")
 public class AccessTokenExtractor implements TokenExtractor {
     private static final String TYPE = "Bearer ";
     private static final String HEADER = "Authorization";

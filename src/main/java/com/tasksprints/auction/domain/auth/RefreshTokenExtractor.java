@@ -8,9 +8,11 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
+@Qualifier("refreshTokenExtractor")
 @RequiredArgsConstructor
 public class RefreshTokenExtractor implements TokenExtractor {
     private static final String COOKIE_NAME = "refresh-token";

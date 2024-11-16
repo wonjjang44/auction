@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @MockBean(JpaMetamodelMappingContext.class)
-class UserControllerTest {
+class UserControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
