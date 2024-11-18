@@ -20,19 +20,22 @@ public class AuthServiceImpl implements AuthService {
 
     private static final Integer COOKIE_AGE_SECONDS = 1209600;
 
-    @Transactional
     @Override
-    public UserTokens login(String email, String password) {
+    public Long validateLogin(String email, String password) {
         UserDetailResponse userDetail = userService.getUserDetailByEmail(email);
 
         if (!password.equals(userDetail.getPassword())) {
             throw new AuthException("password is not correct");
         }
+        return userDetail.getId();
+    }
 
-        UserTokens userTokens = jwtProvider.generateToken(userDetail.getId().toString());
-        refreshTokenService.saveRefreshToken(userTokens.getRefreshToken(), userDetail.getId());
-
-        return userTokens;
+    @Transactional
+    @Override
+    public UserTokens issueTokens(Long userId) {
+        UserTokens tokens = jwtProvider.generateToken(userId.toString());
+        refreshTokenService.saveRefreshToken(tokens.getRefreshToken(), userId);
+        return tokens;
     }
 
     @Override

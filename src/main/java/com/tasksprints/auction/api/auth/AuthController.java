@@ -24,7 +24,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResult<AccessToken>> login(@RequestBody LoginRequest.Login login) {
-        UserTokens tokens = authService.login(login.email(), login.password());
+        Long userId = authService.validateLogin(login.email(), login.password());
+        UserTokens tokens = authService.issueTokens(userId);
         ResponseCookie cookie = authService.getResponseCookie(tokens.getRefreshToken());
 
         return ResponseEntity.ok()

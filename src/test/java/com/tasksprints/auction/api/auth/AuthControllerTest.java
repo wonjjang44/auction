@@ -42,9 +42,8 @@ class AuthControllerTest extends BaseControllerTest {
 
 
     @Nested
-    @DisplayName("test login")
+    @DisplayName("Test login")
     class LoginTest {
-
         private final ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "refreshTokenValue")
             .maxAge(3600)
             .secure(true)
@@ -61,7 +60,8 @@ class AuthControllerTest extends BaseControllerTest {
             AccessToken accessToken = AccessToken.of("accessTokenValue");
             UserTokens tokens = UserTokens.of(accessToken, "refreshTokenValue");
             LoginRequest.Login request = new Login("example@email.com", "password");
-            when(authService.login(any(), any())).thenReturn(tokens);
+            when(authService.validateLogin(any(), any())).thenReturn(1L);
+            when(authService.issueTokens(any())).thenReturn(tokens);
             when(authService.getResponseCookie(any())).thenReturn(responseCookie);
 
             // when
@@ -88,7 +88,7 @@ class AuthControllerTest extends BaseControllerTest {
         void loginFailWhenPasswordIsDifferent() throws Exception {
             // given
             LoginRequest.Login request = new Login("example@email.com", "password");
-            when(authService.login(any(), any())).thenThrow(AuthException.class);
+            when(authService.validateLogin(any(), any())).thenThrow(AuthException.class);
 
             // when
             ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/login")
@@ -107,7 +107,7 @@ class AuthControllerTest extends BaseControllerTest {
         void loginFailWhenEmailIsDifferent() throws Exception {
             // given
             LoginRequest.Login request = new Login("example@email.com", "password");
-            when(authService.login(any(), any())).thenThrow(UserNotFoundException.class);
+            when(authService.validateLogin(any(), any())).thenThrow(UserNotFoundException.class);
 
             // when
             ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/login")

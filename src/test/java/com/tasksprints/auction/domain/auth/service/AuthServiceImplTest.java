@@ -9,9 +9,9 @@ import com.tasksprints.auction.domain.auth.dto.response.AccessToken;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import com.tasksprints.auction.domain.auth.exception.AuthException;
 import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
+import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
 import com.tasksprints.auction.domain.user.model.User;
 import com.tasksprints.auction.domain.user.service.UserService;
-import java.time.Duration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +38,11 @@ class AuthServiceImplTest {
 
     private UserDetailResponse userDetail;
 
+    private String loginEmail;
+
     @BeforeEach
     void setUp() {
+        loginEmail = "user@exapmle.com";
         User existingUser = User.builder()
             .id(1L)
             .email("user@exapmle.com")
@@ -52,43 +55,60 @@ class AuthServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Login success test")
+    @DisplayName("Validate login information test")
     class TestLogin {
         @Test
-        @DisplayName("Return tokens when password is correct")
-        void returnTokensWhenPasswordIsCorrect() {
+        @DisplayName("Return userDetails, when password same")
+        void validateLogin_success() {
             // given
-            String email = "user@exapmle.com";
             String password = "password";
-            AccessToken accessToken = AccessToken.of("accessToken");
-            UserTokens expected = UserTokens.of(accessToken, "refreshToken");
             when(userService.getUserDetailByEmail(any())).thenReturn(userDetail);
-            when(jwtProvider.generateToken(any())).thenReturn(expected);
-            when(refreshTokenService.saveRefreshToken(any(), any())).thenReturn(any());
 
             // when
-            UserTokens actual = authService.login(email, password);
+            Long actualUserId = authService.validateLogin(loginEmail, password);
 
             // then
-            assertEquals(expected.getRefreshToken(), actual.getRefreshToken());
-            assertEquals(expected.getAccessToken(), actual.getAccessToken());
+            assertEquals(1L, actualUserId);
         }
 
         @Test
         @DisplayName("Should throw exception when password is different")
-        void shouldReturnExceptionWhenPasswordIsDifferent() {
+        void validateLoginDifferentPassword() {
             // given
-            String email = "user@exapmle.com";
             String password = "differentPassword";
             when(userService.getUserDetailByEmail(any())).thenReturn(userDetail);
 
             // when
             AuthException exception = assertThrows(AuthException.class, () -> {
-                authService.login(email, password);
+                authService.validateLogin(loginEmail, password);
             });
 
             // then
             assertEquals("password is not correct", exception.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("Issue tokens test")
+    class TestIssueTokens {
+
+        @Test
+        @DisplayName("Return tokens, when issue tokens successfully")
+        void returnTokens_success() {
+            // given
+            Long userId = 1L;
+            AccessToken accessToken = AccessToken.of("accessTokenValue");
+            String refreshToken = "refreshTokenValue";
+            UserTokens generated = UserTokens.of(accessToken, refreshToken);
+            when(jwtProvider.generateToken(any())).thenReturn(generated);
+            when(refreshTokenService.saveRefreshToken(any(), any())).thenReturn(any());
+
+            // when
+            UserTokens issued = authService.issueTokens(userId);
+
+            // then
+            assertEquals(generated.getAccessToken().accessToken(), issued.getAccessToken().accessToken());
+            assertEquals(refreshToken, issued.getRefreshToken());
         }
     }
 
@@ -106,11 +126,11 @@ class AuthServiceImplTest {
             ResponseCookie responseCookie = authService.getResponseCookie(refreshToken);
 
             // then
-            Assertions.assertEquals(1209600, responseCookie.getMaxAge().toSeconds());
-            Assertions.assertTrue(responseCookie.isSecure());
-            Assertions.assertTrue(responseCookie.isHttpOnly());
-            Assertions.assertEquals("None", responseCookie.getSameSite());
-            Assertions.assertEquals("/", responseCookie.getPath());
+            assertEquals(1209600, responseCookie.getMaxAge().toSeconds());
+            assertTrue(responseCookie.isSecure());
+            assertTrue(responseCookie.isHttpOnly());
+            assertEquals("None", responseCookie.getSameSite());
+            assertEquals("/", responseCookie.getPath());
         }
     }
 }
