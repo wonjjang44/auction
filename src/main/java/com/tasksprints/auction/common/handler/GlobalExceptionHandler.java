@@ -6,6 +6,7 @@ import com.tasksprints.auction.domain.auction.exception.AuctionAlreadyClosedExce
 import com.tasksprints.auction.domain.auction.exception.AuctionEndedException;
 import com.tasksprints.auction.domain.auction.exception.AuctionNotFoundException;
 import com.tasksprints.auction.domain.auction.exception.InvalidAuctionTimeException;
+import com.tasksprints.auction.domain.auth.exception.AuthException;
 import com.tasksprints.auction.domain.bid.exception.BidNotFoundException;
 import com.tasksprints.auction.domain.bid.exception.InvalidBidAmountException;
 import com.tasksprints.auction.domain.product.exception.ProductNotFoundException;
@@ -74,5 +75,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResult<String>> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResult.failure(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ApiResult<String>> handleAuthException(AuthException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResult.failure(ApiResponseMessages.USER_NOT_FOUND));
     }
 }
