@@ -3,6 +3,7 @@ package com.tasksprints.auction.common.jwt;
 import static com.tasksprints.auction.common.util.TimeUtil.*;
 
 import com.tasksprints.auction.common.config.JwtConfig;
+import com.tasksprints.auction.domain.auth.dto.response.AccessToken;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -24,9 +25,14 @@ public class JwtProvider {
     private final Clock clock;
 
     public UserTokens generateToken(String subject) {
+        String accessTokenValue = createToken(subject, jwtConfig.getAccessExpireMs());
+        AccessToken accessToken = AccessToken.of(accessTokenValue);
+
+        String refreshToken = createToken(EMPTY_SUBJECT, jwtConfig.getRefreshExpireMs());
+
         return UserTokens.of(
-            createToken(subject, jwtConfig.getAccessExpireMs()),
-            createToken(EMPTY_SUBJECT, jwtConfig.getRefreshExpireMs())
+            accessToken,
+            refreshToken
         );
     }
 

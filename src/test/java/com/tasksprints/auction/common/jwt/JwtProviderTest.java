@@ -74,7 +74,7 @@ class JwtProviderTest {
 
         // then
         Assertions.assertDoesNotThrow(() -> {
-            jwtProvider.validateToken(userTokens.getAccessToken());
+            jwtProvider.validateToken(userTokens.getAccessToken().accessToken());
         });
         Assertions.assertDoesNotThrow(() -> {
             jwtProvider.validateToken(userTokens.getRefreshToken());
@@ -97,7 +97,7 @@ class JwtProviderTest {
         }, "리프레시토큰이 즉시 만료되어야 합니다.");
 
         Assertions.assertThrows(ExpiredJwtException.class, () -> {
-            jwtProvider.validateToken(userTokens.getAccessToken());
+            jwtProvider.validateToken(userTokens.getAccessToken().accessToken());
         }, "액세스토큰이 즉시 만료되어야 합니다.");
     }
 
@@ -109,7 +109,7 @@ class JwtProviderTest {
         UserTokens userTokens = jwtProvider.generateToken("1L");
 
         // when
-        String decodedUserId = jwtProvider.getSubject(userTokens.getAccessToken());
+        String decodedUserId = jwtProvider.getSubject(userTokens.getAccessToken().accessToken());
 
         // then
         assertThat(decodedUserId).isEqualTo("1L");

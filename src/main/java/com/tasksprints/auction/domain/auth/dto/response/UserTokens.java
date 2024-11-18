@@ -7,9 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 public class UserTokens {
     private String refreshToken;
-    private String accessToken;
+    private AccessToken accessToken;
 
-    public static UserTokens of(String accessToken, String refreshToken) {
+    public static UserTokens of(AccessToken accessToken, String refreshToken) {
         return UserTokens.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)

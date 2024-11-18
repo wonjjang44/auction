@@ -21,7 +21,7 @@ public class RefreshToken {
     @Column
     private Long memberId;
 
-    public static RefreshToken create(String id, Long memberId) {
+    public static RefreshToken of(String id, Long memberId) {
         return RefreshToken.builder()
             .id(id)
             .memberId(memberId)

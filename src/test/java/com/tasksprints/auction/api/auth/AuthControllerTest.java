@@ -10,6 +10,7 @@ import com.tasksprints.auction.api.BaseControllerTest;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.domain.auth.dto.request.LoginRequest;
 import com.tasksprints.auction.domain.auth.dto.request.LoginRequest.Login;
+import com.tasksprints.auction.domain.auth.dto.response.AccessToken;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import com.tasksprints.auction.domain.auth.exception.AuthException;
 import com.tasksprints.auction.domain.auth.service.AuthService;
@@ -22,16 +23,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
 @WebMvcTest(AuthController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 class AuthControllerTest extends BaseControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -45,13 +44,25 @@ class AuthControllerTest extends BaseControllerTest {
     @Nested
     @DisplayName("test login")
     class LoginTest {
+
+        private final ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "refreshTokenValue")
+            .maxAge(3600)
+            .secure(true)
+            .httpOnly(true)
+            .sameSite("None")
+            .path("/")
+            .build();
+
+
         @Test
         @DisplayName("Return refresh and access token, when login success")
         void login_success() throws Exception {
             // given
-            UserTokens tokens = UserTokens.of("accessTokenValue", "refreshTokenValue");
+            AccessToken accessToken = AccessToken.of("accessTokenValue");
+            UserTokens tokens = UserTokens.of(accessToken, "refreshTokenValue");
             LoginRequest.Login request = new Login("example@email.com", "password");
             when(authService.login(any(), any())).thenReturn(tokens);
+            when(authService.getResponseCookie(any())).thenReturn(responseCookie);
 
             // when
             ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/login")
@@ -66,7 +77,7 @@ class AuthControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$.data.accessToken").value("accessTokenValue"))
                 .andExpect(jsonPath("$.message").value(ApiResponseMessages.LOGIN_SUCCESS))
                 .andExpect(header().string("set-cookie", containsString("refresh-token=refreshTokenValue")))
-                .andExpect(header().string("set-cookie", containsString("Max-Age=1209600")))
+                .andExpect(header().string("set-cookie", containsString("Max-Age=3600")))
                 .andExpect(header().string("set-cookie", containsString("Secure")))
                 .andExpect(header().string("set-cookie", containsString("HttpOnly")))
                 .andExpect(header().string("set-cookie", containsString("SameSite=None")));

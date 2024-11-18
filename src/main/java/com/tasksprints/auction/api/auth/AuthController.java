@@ -20,25 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-
     private final AuthService authService;
-    private static final Integer COOKIE_AGE_SECONDS = 1209600;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResult<AccessToken>> login(@RequestBody LoginRequest.Login login) {
         UserTokens tokens = authService.login(login.email(), login.password());
-        AccessToken accessToken = AccessToken.of(tokens.getAccessToken());
-
-        ResponseCookie cookie = ResponseCookie.from("refresh-token", tokens.getRefreshToken())
-            .maxAge(COOKIE_AGE_SECONDS)
-            .secure(true)
-            .httpOnly(true)
-            .sameSite("None")
-            .path("/")
-            .build();
+        ResponseCookie cookie = authService.getResponseCookie(tokens.getRefreshToken());
 
         return ResponseEntity.ok()
             .header(SET_COOKIE, cookie.toString())
-            .body(ApiResult.success(ApiResponseMessages.LOGIN_SUCCESS, accessToken));
+            .body(ApiResult.success(ApiResponseMessages.LOGIN_SUCCESS, tokens.getAccessToken()));
     }
 }
