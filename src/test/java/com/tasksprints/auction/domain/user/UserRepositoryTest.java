@@ -95,4 +95,25 @@ public class UserRepositoryTest {
             log.info("Created User: {}", createdUser);
         }
     }
+
+
+    @DisplayName("find User By Email")
+    @Test
+    void findUserByEmail() {
+        // given
+        User createdUser = userRepository.save(user);
+        String findEmail = "test@example.com";
+
+        // when
+        User foundUser = userRepository.findByEmail(findEmail).orElse(null);
+
+        // then
+        Assertions.assertNotNull(foundUser);
+        Assertions.assertEquals(createdUser.getId(), foundUser.getId());
+        Assertions.assertEquals("testUser", foundUser.getName());
+        Assertions.assertEquals("testNick", foundUser.getNickName());
+        Assertions.assertEquals("test@example.com", foundUser.getEmail());
+
+        log.info("Found User: {}", foundUser);
+    }
 }
