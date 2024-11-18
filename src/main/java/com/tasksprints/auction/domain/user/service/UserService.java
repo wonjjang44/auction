@@ -16,4 +16,6 @@ public interface UserService {
     UserDetailResponse updateUser(Long id, UserRequest.Update user);
 
     void deleteUser(Long id);
+
+    UserDetailResponse getUserDetailByEmail(String email);
 }

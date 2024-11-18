@@ -59,4 +59,10 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user); // 상태 업데이트를 저장
     }
 
+    @Override
+    public UserDetailResponse getUserDetailByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UserNotFoundException("User not found with email " + email));
+        return UserDetailResponse.of(user);
+    }
 }
