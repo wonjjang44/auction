@@ -11,6 +11,7 @@ import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.domain.auth.dto.request.LoginRequest;
 import com.tasksprints.auction.domain.auth.dto.request.LoginRequest.Login;
 import com.tasksprints.auction.domain.auth.dto.response.AccessToken;
+import com.tasksprints.auction.domain.auth.dto.response.ResponseTokens;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import com.tasksprints.auction.domain.auth.exception.AuthException;
 import com.tasksprints.auction.domain.auth.service.AuthService;
@@ -60,9 +61,9 @@ class AuthControllerTest extends BaseControllerTest {
             AccessToken accessToken = AccessToken.of("accessTokenValue");
             UserTokens tokens = UserTokens.of(accessToken, "refreshTokenValue");
             LoginRequest.Login request = new Login("example@email.com", "password");
+            ResponseTokens responseTokens = ResponseTokens.of(accessToken, responseCookie);
             when(authService.validateLogin(any(), any())).thenReturn(1L);
-            when(authService.issueTokens(any())).thenReturn(tokens);
-            when(authService.getResponseCookie(any())).thenReturn(responseCookie);
+            when(authService.issueResponseTokens(any())).thenReturn(responseTokens);
 
             // when
             ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/login")

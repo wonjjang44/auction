@@ -6,10 +6,9 @@ import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
 import com.tasksprints.auction.domain.auth.dto.request.LoginRequest;
 import com.tasksprints.auction.domain.auth.dto.response.AccessToken;
-import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
+import com.tasksprints.auction.domain.auth.dto.response.ResponseTokens;
 import com.tasksprints.auction.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +24,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResult<AccessToken>> login(@RequestBody LoginRequest.Login login) {
         Long userId = authService.validateLogin(login.email(), login.password());
-        UserTokens tokens = authService.issueTokens(userId);
-        ResponseCookie cookie = authService.getResponseCookie(tokens.getRefreshToken());
+        ResponseTokens responseTokens = authService.issueResponseTokens(userId);
 
         return ResponseEntity.ok()
-            .header(SET_COOKIE, cookie.toString())
-            .body(ApiResult.success(ApiResponseMessages.LOGIN_SUCCESS, tokens.getAccessToken()));
+            .header(SET_COOKIE, responseTokens.refreshToken().toString())
+            .body(ApiResult.success(ApiResponseMessages.LOGIN_SUCCESS, responseTokens.accessToken()));
     }
 }

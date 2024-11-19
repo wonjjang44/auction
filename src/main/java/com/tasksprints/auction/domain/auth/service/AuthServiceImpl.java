@@ -1,6 +1,7 @@
 package com.tasksprints.auction.domain.auth.service;
 
 import com.tasksprints.auction.common.jwt.JwtProvider;
+import com.tasksprints.auction.domain.auth.dto.response.ResponseTokens;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import com.tasksprints.auction.domain.auth.exception.AuthException;
 import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
@@ -18,8 +19,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
 
-    private static final Integer COOKIE_AGE_SECONDS = 1209600;
-
     @Override
     public Long validateLogin(String email, String password) {
         UserDetailResponse userDetail = userService.getUserDetailByEmail(email);
@@ -32,20 +31,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
-    public UserTokens issueTokens(Long userId) {
+    public ResponseTokens issueResponseTokens(Long userId) {
         UserTokens tokens = jwtProvider.generateToken(userId.toString());
         refreshTokenService.saveRefreshToken(tokens.getRefreshToken(), userId);
-        return tokens;
-    }
+        ResponseCookie refreshToken = refreshTokenService.getResponseRefreshToken(tokens.getRefreshToken());
 
-    @Override
-    public ResponseCookie getResponseCookie(String refreshToken) {
-        return ResponseCookie.from("refresh-token", refreshToken)
-            .maxAge(COOKIE_AGE_SECONDS)
-            .secure(true)
-            .httpOnly(true)
-            .sameSite("None")
-            .path("/")
-            .build();
+        return ResponseTokens.of(tokens.getAccessToken(), refreshToken);
     }
 }

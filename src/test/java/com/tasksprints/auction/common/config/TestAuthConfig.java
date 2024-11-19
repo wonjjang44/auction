@@ -2,6 +2,7 @@ package com.tasksprints.auction.common.config;
 
 import com.tasksprints.auction.common.jwt.JwtProvider;
 import com.tasksprints.auction.domain.auth.TokenExtractor;
+import com.tasksprints.auction.domain.auth.service.RefreshTokenCookieManager;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +15,8 @@ public class TestAuthConfig {
     }
 
     @Bean
-    public TokenExtractor refreshTokenExtractor() {
-        return Mockito.mock(TokenExtractor.class);
+    public RefreshTokenCookieManager refreshTokenCookieManager() {
+        return Mockito.mock(RefreshTokenCookieManager.class);
     }
 
     @Bean

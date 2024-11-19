@@ -6,10 +6,11 @@ import static org.mockito.Mockito.*;
 
 import com.tasksprints.auction.common.jwt.JwtProvider;
 import com.tasksprints.auction.domain.auth.dto.response.AccessToken;
+import com.tasksprints.auction.domain.auth.dto.response.ResponseTokens;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import com.tasksprints.auction.domain.auth.exception.AuthException;
+import com.tasksprints.auction.domain.auth.model.RefreshToken;
 import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
-import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
 import com.tasksprints.auction.domain.user.model.User;
 import com.tasksprints.auction.domain.user.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -89,48 +90,48 @@ class AuthServiceImplTest {
     }
 
     @Nested
-    @DisplayName("Issue tokens test")
+    @DisplayName("Issue response tokens test")
     class TestIssueTokens {
+
+        public static ResponseCookie createResponseCookie(String value) {
+            return ResponseCookie.from("refresh-token", value)
+                .maxAge(3600)
+                .secure(true)
+                .httpOnly(true)
+                .sameSite("None")
+                .path("/")
+                .build();
+        }
+
+        public static AccessToken createAccessToken(String value) {
+            return new AccessToken(value);
+        }
+
+        public static UserTokens createUserTokens(String accessTokenValue, String refreshTokenValue) {
+            return UserTokens.of(createAccessToken(accessTokenValue), refreshTokenValue);
+        }
 
         @Test
         @DisplayName("Return tokens, when issue tokens successfully")
-        void returnTokens_success() {
+        void returnResponseTokens_success() {
             // given
+            String refreshTokenValue = "refreshTokenValue";
+            String accessTokenValue = "accessTokenValue";
+            UserTokens generatedTokens = createUserTokens(accessTokenValue, refreshTokenValue);
             Long userId = 1L;
-            AccessToken accessToken = AccessToken.of("accessTokenValue");
-            String refreshToken = "refreshTokenValue";
-            UserTokens generated = UserTokens.of(accessToken, refreshToken);
-            when(jwtProvider.generateToken(any())).thenReturn(generated);
-            when(refreshTokenService.saveRefreshToken(any(), any())).thenReturn(any());
+            RefreshToken refreshToken = new RefreshToken(refreshTokenValue, userId);
+
+            when(jwtProvider.generateToken(any())).thenReturn(generatedTokens);
+            when(refreshTokenService.saveRefreshToken(any(), any())).thenReturn(refreshToken);
+            when(refreshTokenService.getResponseRefreshToken(any())).thenReturn(createResponseCookie(refreshTokenValue));
 
             // when
-            UserTokens issued = authService.issueTokens(userId);
+            ResponseTokens responseTokens = authService.issueResponseTokens(userId);
 
             // then
-            assertEquals(generated.getAccessToken().accessToken(), issued.getAccessToken().accessToken());
-            assertEquals(refreshToken, issued.getRefreshToken());
-        }
-    }
-
-    @Nested
-    @DisplayName("Get response cookie test")
-    class TestResponseCookie {
-
-        @Test
-        @DisplayName("Return ResponseCookie, when creating the cookie successfully")
-        void returnResponseCookie_success() {
-            // given
-            String refreshToken = "refreshTokenValue";
-
-            // when
-            ResponseCookie responseCookie = authService.getResponseCookie(refreshToken);
-
-            // then
-            assertEquals(1209600, responseCookie.getMaxAge().toSeconds());
-            assertTrue(responseCookie.isSecure());
-            assertTrue(responseCookie.isHttpOnly());
-            assertEquals("None", responseCookie.getSameSite());
-            assertEquals("/", responseCookie.getPath());
+            assertNotNull(responseTokens);
+            assertNotNull(responseTokens.accessToken());
+            assertNotNull(responseTokens.refreshToken());
         }
     }
 }

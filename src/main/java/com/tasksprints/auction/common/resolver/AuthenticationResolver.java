@@ -5,6 +5,7 @@ import com.tasksprints.auction.common.jwt.JwtProvider;
 import com.tasksprints.auction.domain.auth.TokenExtractor;
 import com.tasksprints.auction.domain.auth.exception.RefreshTokenException;
 import com.tasksprints.auction.domain.auth.model.Accessor;
+import com.tasksprints.auction.domain.auth.service.RefreshTokenCookieManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -18,7 +19,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class AuthenticationResolver implements HandlerMethodArgumentResolver {
     private final JwtProvider jwtProvider;
-    private final TokenExtractor refreshTokenExtractor;
+    private final RefreshTokenCookieManager refreshTokenCookieManager;
     private final TokenExtractor accessTokenExtractor;
 
     @Override
@@ -38,7 +39,7 @@ public class AuthenticationResolver implements HandlerMethodArgumentResolver {
             throw new IllegalArgumentException();
         }
         try {
-            String refreshToken = refreshTokenExtractor.extractToken(request);
+            String refreshToken = refreshTokenCookieManager.extractRefreshToken(request);
             String accessToken = accessTokenExtractor.extractToken(request);
 
             jwtProvider.validateToken(accessToken);

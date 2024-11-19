@@ -1,4 +1,4 @@
-package com.tasksprints.auction.domain.auth;
+package com.tasksprints.auction.domain.auth.service;
 
 import static com.tasksprints.auction.common.constant.ApiResponseMessages.REFRESH_TOKEN_NOT_FOUND;
 
@@ -8,18 +8,18 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
-@Qualifier("refreshTokenExtractor")
 @RequiredArgsConstructor
-public class RefreshTokenExtractor implements TokenExtractor {
+public class RefreshTokenCookieManager {
+    private static final Integer COOKIE_AGE_SECONDS = 1209600;
     private static final String COOKIE_NAME = "refresh-token";
 
     private final RefreshTokenRepository refreshTokenRepository;
-    @Override
-    public String extractToken(HttpServletRequest request) {
+
+    public String extractRefreshToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null) {
@@ -31,5 +31,15 @@ public class RefreshTokenExtractor implements TokenExtractor {
             .findFirst()
             .orElseThrow(() -> new RefreshTokenException(REFRESH_TOKEN_NOT_FOUND))
             .getValue();
+    }
+
+    public ResponseCookie createResponseCookie(String refreshToken) {
+        return ResponseCookie.from(COOKIE_NAME, refreshToken)
+            .maxAge(COOKIE_AGE_SECONDS)
+            .secure(true)
+            .httpOnly(true)
+            .sameSite("None")
+            .path("/")
+            .build();
     }
 }
