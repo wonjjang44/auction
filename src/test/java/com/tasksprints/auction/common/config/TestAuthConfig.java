@@ -3,24 +3,17 @@ package com.tasksprints.auction.common.config;
 import com.tasksprints.auction.common.jwt.JwtProvider;
 import com.tasksprints.auction.domain.auth.TokenExtractor;
 import com.tasksprints.auction.domain.auth.service.RefreshTokenCookieManager;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @TestConfiguration
 public class TestAuthConfig {
-    @Bean
-    public JwtProvider jwtProvider() {
-        return Mockito.mock(JwtProvider.class);
-    }
+    @MockBean
+    public JwtProvider jwtProvider;
 
-    @Bean
-    public RefreshTokenCookieManager refreshTokenCookieManager() {
-        return Mockito.mock(RefreshTokenCookieManager.class);
-    }
+    @MockBean
+    public RefreshTokenCookieManager refreshTokenCookieManager;
 
-    @Bean
-    public TokenExtractor accessTokenExtractor() {
-        return Mockito.mock(TokenExtractor.class);
-    }
+    @MockBean
+    public TokenExtractor accessTokenExtractor;
 }

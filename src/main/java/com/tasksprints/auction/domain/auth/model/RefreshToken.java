@@ -19,12 +19,12 @@ public class RefreshToken {
     private String id;
 
     @Column
-    private Long memberId;
+    private Long userId;
 
-    public static RefreshToken of(String id, Long memberId) {
+    public static RefreshToken of(String id, Long userId) {
         return RefreshToken.builder()
             .id(id)
-            .memberId(memberId)
+            .userId(userId)
             .build();
     }
 }

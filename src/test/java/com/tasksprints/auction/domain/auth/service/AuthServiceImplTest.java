@@ -55,6 +55,16 @@ class AuthServiceImplTest {
         userDetail = UserDetailResponse.of(existingUser);
     }
 
+    public static ResponseCookie createResponseCookie(String value) {
+        return ResponseCookie.from("refresh-token", value)
+            .maxAge(3600)
+            .secure(true)
+            .httpOnly(true)
+            .sameSite("None")
+            .path("/")
+            .build();
+    }
+
     @Nested
     @DisplayName("Validate login information test")
     class TestLogin {
@@ -92,17 +102,6 @@ class AuthServiceImplTest {
     @Nested
     @DisplayName("Issue response tokens test")
     class TestIssueTokens {
-
-        public static ResponseCookie createResponseCookie(String value) {
-            return ResponseCookie.from("refresh-token", value)
-                .maxAge(3600)
-                .secure(true)
-                .httpOnly(true)
-                .sameSite("None")
-                .path("/")
-                .build();
-        }
-
         public static AccessToken createAccessToken(String value) {
             return new AccessToken(value);
         }

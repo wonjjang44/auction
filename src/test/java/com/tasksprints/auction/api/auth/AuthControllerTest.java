@@ -14,8 +14,10 @@ import com.tasksprints.auction.domain.auth.dto.response.AccessToken;
 import com.tasksprints.auction.domain.auth.dto.response.ResponseTokens;
 import com.tasksprints.auction.domain.auth.dto.response.UserTokens;
 import com.tasksprints.auction.domain.auth.exception.AuthException;
+import com.tasksprints.auction.domain.auth.model.Accessor;
 import com.tasksprints.auction.domain.auth.service.AuthService;
 import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -40,6 +42,16 @@ class AuthControllerTest extends BaseControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    static ResponseCookie createResponseCookie() {
+        return ResponseCookie.from("refresh-token", "refreshTokenValue")
+            .maxAge(3600)
+            .secure(true)
+            .httpOnly(true)
+            .sameSite("None")
+            .path("/")
+            .build();
+    }
 
 
     @Nested
@@ -120,6 +132,40 @@ class AuthControllerTest extends BaseControllerTest {
             resultActions
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(ApiResponseMessages.USER_NOT_FOUND));
+        }
+    }
+
+    @Nested
+    @DisplayName("Test reissueToken")
+    class ReissueTest {
+        // given
+        Long userId = 1L;
+        AccessToken accessToken = AccessToken.of("accessTokenValue");
+        ResponseTokens responseTokens = ResponseTokens.of(accessToken, createResponseCookie());
+        Cookie cookie = new Cookie("refresh-token", "refreshToken");
+        @Test
+        @DisplayName("If refresh token exist in repository, return refresh token")
+        void testReissue_success() throws Exception {
+            // given
+            when(authService.reissueResponseTokens(any())).thenReturn(responseTokens);
+
+            // when
+            ResultActions resultActions = mockMvc.perform(get("/api/v1/auth/reissue")
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(cookie)
+            );
+
+            // then
+            resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.accessToken").value("accessTokenValue"))
+                .andExpect(jsonPath("$.message").value(ApiResponseMessages.LOGIN_SUCCESS))
+                .andExpect(header().string("set-cookie", containsString("refresh-token=refreshTokenValue")))
+                .andExpect(header().string("set-cookie", containsString("Max-Age=3600")))
+                .andExpect(header().string("set-cookie", containsString("Secure")))
+                .andExpect(header().string("set-cookie", containsString("HttpOnly")))
+                .andExpect(header().string("set-cookie", containsString("SameSite=None")));
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.tasksprints.auction.domain.auth.service;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.tasksprints.auction.domain.auth.exception.RefreshTokenException;
 import com.tasksprints.auction.domain.auth.model.RefreshToken;
 import com.tasksprints.auction.domain.auth.repository.RefreshTokenRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,7 +27,7 @@ class RefreshTokenServiceImplTest {
 
     @Nested
     @DisplayName("Save RefreshToken test")
-    class saveRefreshTokenTest {
+    class TestSaveRefreshToken {
         @Test
         @DisplayName("should return RefreshToken, when the test is success")
         void testSaveRefreshToken_success() {
@@ -38,8 +41,38 @@ class RefreshTokenServiceImplTest {
             RefreshToken actualRefreshToken = refreshTokenService.saveRefreshToken(refreshTokenValue, userId);
 
             // then
-            Assertions.assertEquals(expectedRefreshToken.getMemberId(), actualRefreshToken.getMemberId());
-            Assertions.assertEquals(expectedRefreshToken.getId(), actualRefreshToken.getId());
+            assertEquals(expectedRefreshToken.getUserId(), actualRefreshToken.getUserId());
+            assertEquals(expectedRefreshToken.getId(), actualRefreshToken.getId());
+        }
+    }
+
+    @Nested
+    @DisplayName("Find refresh Token test")
+    class TestFindRefreshToken {
+
+        void testFindRefreshToken_success() {
+            // given
+            String refreshTokenValue = "refreshToken";
+            RefreshToken existedRefreshToken = RefreshToken.of("refreshToken", 1L);
+            when(refreshTokenRepository.findById(any())).thenReturn(Optional.ofNullable(existedRefreshToken));
+
+            // when
+            RefreshToken foundRefreshToken = refreshTokenService.findRefreshTokenById(refreshTokenValue);
+
+            // then
+            assertEquals(1L, foundRefreshToken.getUserId());
+            assertEquals(refreshTokenValue, foundRefreshToken.getId());
+        }
+
+        void testFindRefreshToken_fail() {
+            // given
+            String refreshTokenValue = "refreshToken";
+            when(refreshTokenRepository.findById(any())).thenReturn(Optional.empty());
+
+            // when, then
+            Assertions.assertThrows(RefreshTokenException.class, () -> {
+                refreshTokenService.findRefreshTokenById(refreshTokenValue);
+            });
         }
     }
 }

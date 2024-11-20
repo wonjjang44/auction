@@ -38,4 +38,11 @@ public class AuthServiceImpl implements AuthService {
 
         return ResponseTokens.of(tokens.getAccessToken(), refreshToken);
     }
+
+    @Transactional
+    @Override
+    public ResponseTokens reissueResponseTokens(String refreshToken) {
+        Long userId = refreshTokenService.findRefreshTokenById(refreshToken).getUserId();
+        return issueResponseTokens(userId);
+    }
 }

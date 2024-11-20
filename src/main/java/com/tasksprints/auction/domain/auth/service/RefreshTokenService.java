@@ -7,4 +7,6 @@ public interface RefreshTokenService {
     RefreshToken saveRefreshToken(String refreshTokenValue, Long userId);
 
     ResponseCookie getResponseRefreshToken(String refresh);
+
+    RefreshToken findRefreshTokenById(String refreshToken);
 }

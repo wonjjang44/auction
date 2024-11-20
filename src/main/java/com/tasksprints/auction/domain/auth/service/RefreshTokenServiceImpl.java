@@ -1,5 +1,6 @@
 package com.tasksprints.auction.domain.auth.service;
 
+import com.tasksprints.auction.domain.auth.exception.RefreshTokenException;
 import com.tasksprints.auction.domain.auth.model.RefreshToken;
 import com.tasksprints.auction.domain.auth.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public ResponseCookie getResponseRefreshToken(String refreshToken) {
         return cookieManager.createResponseCookie(refreshToken);
+    }
+
+    @Override
+    public RefreshToken findRefreshTokenById(String refreshToken) {
+        return refreshTokenRepository.findById(refreshToken)
+            .orElseThrow(() -> new RefreshTokenException("Invalid refresh token"));
     }
 }

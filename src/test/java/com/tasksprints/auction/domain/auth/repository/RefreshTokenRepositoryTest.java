@@ -27,7 +27,7 @@ class RefreshTokenRepositoryTest {
     void setUp() {
         refreshToken = RefreshToken.builder()
             .id("testId")
-            .memberId(1L)
+            .userId(1L)
             .build();
     }
 

@@ -6,4 +6,6 @@ public interface AuthService {
     Long validateLogin(String email, String password);
 
     ResponseTokens issueResponseTokens(Long userId);
+
+    ResponseTokens reissueResponseTokens(String refreshToken);
 }
