@@ -1,5 +1,7 @@
 package com.tasksprints.auction.domain.wallet.service;
 
+import com.tasksprints.auction.domain.user.model.User;
+import com.tasksprints.auction.domain.user.service.UserService;
 import com.tasksprints.auction.domain.wallet.model.Wallet;
 import com.tasksprints.auction.domain.wallet.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +25,9 @@ public class WalletServiceImpl implements WalletService {
         return false;
     }
 
+    @Override
+    public Wallet getWalletByUserId(Long userId) {
+        return walletRepository.getWalletByUserId(userId);
+    }
 
 }

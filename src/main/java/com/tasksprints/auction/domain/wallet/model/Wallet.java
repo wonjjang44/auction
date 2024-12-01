@@ -34,6 +34,7 @@ public class Wallet extends BaseEntityWithUpdate {
     private String userName;
 
     @OneToMany(mappedBy = "wallet", fetch = FetchType.LAZY)
+    @Builder.Default
     private List<Payment> payments = new ArrayList<>();
 
     @OneToOne(mappedBy = "wallet", fetch = FetchType.LAZY)

@@ -33,6 +33,13 @@ public class PaymentRequest {
         private String paymentKey;
     }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Cancel {
+        private String paymentKey;
+    }
+
     public Payment toEntity() {
         return Payment.builder()
             .amount(amount)

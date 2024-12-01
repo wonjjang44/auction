@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.common.config.PaymentConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
+import com.tasksprints.auction.domain.payment.api.Response;
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
+import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
 import com.tasksprints.auction.domain.payment.exception.InvalidSessionException;
 import com.tasksprints.auction.domain.payment.exception.PaymentDataMismatchException;
@@ -46,17 +48,23 @@ public class PaymentController {
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<?> confirmPayment(HttpSession session, @RequestBody PaymentRequest.Confirm confirmRequest) throws IOException, InterruptedException {
+    public ResponseEntity<?> confirmPayment(HttpSession session, @RequestBody PaymentRequest.Confirm confirmRequest, @RequestParam Long userId) throws IOException, InterruptedException {
         validateSession(session);
         validatePaymentConfirmRequest(confirmRequest, session);
 
-        HttpResponse<String> response = paymentService.sendPaymentRequestToTossPayment(confirmRequest);
+        Response<Object> response = paymentService.sendPaymentRequest(confirmRequest);
         //토스페이먼츠로 보낸 결제 승인 요청에 대한 response 리턴
-        return paymentService.handleTossPaymentResponse(confirmRequest, response);
+        Response<Object> objectResponse = paymentService.handleTossPaymentResponse(userId, confirmRequest, response);
+
+        if (objectResponse.isSuccess()) {
+            PaymentResponse paymentResponse = (PaymentResponse) objectResponse.getBody();
+            return ResponseEntity.ok(ApiResult.success("결제가 성공적으로 처리되었습니다.", paymentResponse));
+        }
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
 
-    private void validatePaymentConfirmRequest(PaymentRequest.Confirm confirmRequest, HttpSession session){
+    private void validatePaymentConfirmRequest(PaymentRequest.Confirm confirmRequest, HttpSession session) {
         String savedOrderId = (String) session.getAttribute("orderId");
         BigDecimal savedAmount = (BigDecimal) session.getAttribute("amount");
 
@@ -66,12 +74,16 @@ public class PaymentController {
     }
 
     private void validateSession(HttpSession session) {
-        if (session == null) {throw new InvalidSessionException("Invalid session");}
+        if (session == null) {
+            throw new InvalidSessionException("Invalid session");
+        }
 
         String savedOrderId = (String) session.getAttribute("orderId");
         BigDecimal savedAmount = (BigDecimal) session.getAttribute("amount");
 
-        if (savedOrderId == null || savedAmount == null) {throw new InvalidSessionException("Invalid session");}
+        if (savedOrderId == null || savedAmount == null) {
+            throw new InvalidSessionException("Invalid session");
+        }
     }
 
 
