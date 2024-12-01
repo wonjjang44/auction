@@ -1,4 +1,4 @@
-package com.tasksprints.auction.api.auth;
+package com.tasksprints.auction.api;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.api.BaseControllerTest;
+import com.tasksprints.auction.api.auth.AuthController;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.domain.auth.dto.request.LoginRequest;
 import com.tasksprints.auction.domain.auth.dto.request.LoginRequest.Login;
