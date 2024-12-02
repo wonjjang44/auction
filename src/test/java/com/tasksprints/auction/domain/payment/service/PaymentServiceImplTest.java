@@ -88,12 +88,6 @@ public class PaymentServiceImplTest {
             assertThat(session.getAttribute("amount")).isEqualTo(amount);
         }
 
-        @Test
-        void 결제_요청을_받았을_때_세션에_값이_저장되지_않으면_예외_처리() {
-            //given
-            //when
-            //then
-        }
     }
 
     @Nested
@@ -178,28 +172,6 @@ public class PaymentServiceImplTest {
         }
 
     }
-//    @Test
-//    @DisplayName("handleTossPaymentResponse Test")
-//    void 토스페이로_httpRequest가_전송되면_성공한다() throws IOException, InterruptedException {
-//        // given
-//        PaymentRequest.Confirm confirmRequest = new PaymentRequest.Confirm("orderId123", BigDecimal.valueOf(1000), "paymentKey123");
-//        when(objectMapper.writeValueAsString(confirmRequest)).thenReturn("{\"orderId\":\"orderId123\",\"amount\":1000,\"paymentKey\":\"paymentKey123\"}");
-//        when(paymentConfig.getAuthorizations()).thenReturn("test-token");
-//        when(mockResponse.statusCode()).thenReturn(200);
-//        when(mockResponse.body()).thenReturn("{\"status\":\"SUCCESS\"}");
-//        when(httpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
-//            .thenReturn(mockResponse);
-//
-//        // when
-//        HttpResponse<String> response = paymentService.sendPaymentRequest(confirmRequest);
-//
-//        // then
-//        assertNotNull(response);
-//        assertEquals(200, response.statusCode());
-//        assertEquals("{\"status\":\"SUCCESS\"}", response.body());
-//        verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));
-//        verify(paymentConfig, times(1)).getAuthorizations();
-//    }
 
 
 }
