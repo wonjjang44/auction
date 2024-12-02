@@ -156,11 +156,8 @@ public class PaymentServiceImplTest {
             PaymentErrorResponse errorResponse = PaymentErrorResponse.builder()
                 .version("2022-11-16")
                 .traceId("{traceId}")
-                .error(PaymentErrorResponse.ErrorDetail.builder()
-                    .code("{CODE}")
-                    .message("{MESSAGE}")
-                    .build()
-                )
+                .code("{CODE}")
+                .message("{MESSAGE}")
                 .build();
             Response<Object> failureResponse = Response.failure(404, errorResponse);
 

@@ -181,11 +181,8 @@ public class PaymentControllerTest {
         PaymentErrorResponse failurePaymentResponse = PaymentErrorResponse.builder()
             .version("2022-11-16")
             .traceId("{traceId}")
-            .error(PaymentErrorResponse.ErrorDetail.builder()
-                .code("{CODE}")
-                .message("{MESSAGE}")
-                .build()
-            )
+            .code("{CODE}")
+            .message("{MESSAGE}")
             .build();
         Response<Object> mockResponse = Response.failure(400, failurePaymentResponse);
 
@@ -200,8 +197,8 @@ public class PaymentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequest))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.error.code").value("{CODE}"))
-            .andExpect(jsonPath("$.error.message").value("{MESSAGE}"));
+            .andExpect(jsonPath("$.code").value("{CODE}"))
+            .andExpect(jsonPath("$.message").value("{MESSAGE}"));
     }
 
 }
