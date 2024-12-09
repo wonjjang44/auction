@@ -35,11 +35,6 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentClient.sendPaymentRequest(confirmRequest);
     }
 
-    @Override
-    public Response<Object> cancelPaymentApproval(PaymentRequest.Cancel cancelRequest) throws IOException, InterruptedException {
-        return paymentClient.cancelPaymentApproval(cancelRequest);
-    }
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Response<Object> handleTossPaymentResponse(Long userId, PaymentRequest.Confirm confirmRequest, Response<Object> response) throws IOException, InterruptedException {

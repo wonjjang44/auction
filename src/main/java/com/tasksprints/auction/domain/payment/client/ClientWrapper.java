@@ -5,7 +5,6 @@ import com.tasksprints.auction.domain.payment.api.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -15,7 +14,6 @@ import java.net.http.HttpResponse;
 @RequiredArgsConstructor
 public class ClientWrapper implements HttpClientWrapper{
     private final HttpClient httpClient;
-    private final ObjectMapper objectMapper;
 
     @Override
     public Response<String> send(HttpRequest request) throws IOException, InterruptedException {

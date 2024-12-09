@@ -20,15 +20,4 @@ public class PaymentErrorResponse {
     @JsonAlias({"message", "error.message"})
     private String message;
 
-//    private ErrorDetail error;
-//
-//    @Builder
-//    @Getter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class ErrorDetail {
-//        private String code;
-//        private String message;
-//    }
-
 }
