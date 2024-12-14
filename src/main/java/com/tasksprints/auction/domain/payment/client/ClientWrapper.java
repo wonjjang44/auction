@@ -1,6 +1,5 @@
 package com.tasksprints.auction.domain.payment.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.domain.payment.api.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

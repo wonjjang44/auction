@@ -1,37 +1,23 @@
 package com.tasksprints.auction.api.payment;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tasksprints.auction.common.config.PaymentConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
 import com.tasksprints.auction.domain.payment.api.Response;
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
 import com.tasksprints.auction.domain.payment.exception.InvalidSessionException;
 import com.tasksprints.auction.domain.payment.exception.PaymentDataMismatchException;
-import com.tasksprints.auction.domain.payment.exception.PaymentUserNotFoundException;
-import com.tasksprints.auction.domain.payment.model.Payment;
-import com.tasksprints.auction.domain.payment.repository.PaymentRepository;
 import com.tasksprints.auction.domain.payment.service.PaymentService;
-import com.tasksprints.auction.domain.user.model.User;
-import com.tasksprints.auction.domain.user.repository.UserRepository;
-import com.tasksprints.auction.domain.user.service.UserServiceImpl;
-import com.tasksprints.auction.domain.wallet.model.Wallet;
-import com.tasksprints.auction.domain.wallet.service.WalletServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
 
 @RestController
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package com.tasksprints.auction.domain.payment.service;
 
 import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.client.PaymentClient;
+import com.tasksprints.auction.domain.payment.client.PaymentApiSerializer;
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
 import com.tasksprints.auction.domain.payment.model.Payment;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final WalletService walletService;
-    private final PaymentClient paymentClient;
+    private final PaymentApiSerializer paymentApiSerializer;
 
     @Override
     public void prepare(HttpSession session, PaymentRequest.Prepare prepareRequest) {
@@ -32,7 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
     @Override
     public Response<Object> sendPaymentRequest(PaymentRequest.Confirm confirmRequest) throws IOException, InterruptedException{
-        return paymentClient.sendPaymentRequest(confirmRequest);
+        return paymentApiSerializer.sendPaymentRequest(confirmRequest);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -61,7 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
             String paymentKey = confirmRequest.getPaymentKey();
             PaymentRequest.Cancel cancelRequest = new PaymentRequest.Cancel(paymentKey);
 
-            paymentClient.cancelPaymentApproval(cancelRequest);
+            paymentApiSerializer.cancelPaymentApproval(cancelRequest);
             throw e;
         }
     }

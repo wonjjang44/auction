@@ -3,7 +3,7 @@ package com.tasksprints.auction.domain.payment.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.tasksprints.auction.common.config.PaymentConfig;
+import com.tasksprints.auction.common.properties.PaymentProperties;
 import com.tasksprints.auction.domain.payment.api.Response;
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
@@ -17,9 +17,9 @@ import java.net.http.HttpRequest;
 
 @Component
 @RequiredArgsConstructor
-public class TossPaymentClientImpl implements PaymentClient {
+public class TossPaymentImpl implements PaymentApiSerializer {
 
-    private final PaymentConfig paymentConfig;
+    private final PaymentProperties paymentProperties;
     private final ObjectMapper objectMapper;
     private final HttpClientWrapper httpClientWrapper;
 
@@ -43,8 +43,8 @@ public class TossPaymentClientImpl implements PaymentClient {
 
     private HttpRequest createHttpRequest(String requestBody) {
         return HttpRequest.newBuilder()
-            .uri(URI.create(PaymentConfig.CONFIRM_URL))
-            .header("Authorization", paymentConfig.getAuthorizations())
+            .uri(URI.create(PaymentProperties.CONFIRM_URL))
+            .header("Authorization", paymentProperties.getAuthorizations())
             .header("Content-Type", "application/json")
             .method("POST", HttpRequest.BodyPublishers.ofString(requestBody))
             .build();
@@ -79,7 +79,7 @@ public class TossPaymentClientImpl implements PaymentClient {
         String insertPaymentKeyIntoUrl = String.format("https://api.tosspayments.com/v1/payments/%s/cancel", cancelRequest.getPaymentKey());
         return HttpRequest.newBuilder()
             .uri(URI.create(insertPaymentKeyIntoUrl))
-            .header("Authorization", paymentConfig.getAuthorizations())
+            .header("Authorization", paymentProperties.getAuthorizations())
             .header("Content-Type", "application/json")
             //            .header("Idempotency-key", "멱등키")
             .method("POST", HttpRequest.BodyPublishers.ofString(requestBody))
@@ -91,3 +91,4 @@ public class TossPaymentClientImpl implements PaymentClient {
     }
 
 }
+

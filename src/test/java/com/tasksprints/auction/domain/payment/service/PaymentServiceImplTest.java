@@ -1,7 +1,7 @@
 package com.tasksprints.auction.domain.payment.service;
 
 import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.client.PaymentClient;
+import com.tasksprints.auction.domain.payment.client.PaymentApiSerializer;
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
@@ -23,8 +23,6 @@ import org.springframework.mock.web.MockHttpSession;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,7 +38,7 @@ public class PaymentServiceImplTest {
     @Mock
     private WalletService walletService;
     @Mock
-    private PaymentClient paymentClient;
+    private PaymentApiSerializer paymentApiSerializer;
     @Mock
     private PaymentRepository paymentRepository;
 
@@ -144,7 +142,7 @@ public class PaymentServiceImplTest {
             );
 
             // then
-            verify(paymentClient).cancelPaymentApproval(any(PaymentRequest.Cancel.class));
+            verify(paymentApiSerializer).cancelPaymentApproval(any(PaymentRequest.Cancel.class));
             //예외 발생으로 chargeMoney전에 throw 됐을 것
             verify(walletService, times(0)).chargeMoney(any(Wallet.class), any(BigDecimal.class));
         }

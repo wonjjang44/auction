@@ -1,25 +1,19 @@
-package com.tasksprints.auction.common.config;
+package com.tasksprints.auction.common.properties;
 
 import lombok.Getter;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
-@Configuration
+@Component
+@ConfigurationProperties(prefix = "payment.toss")
 @Getter
-public class PaymentConfig {
-    @Value("${payment.toss.test_client_api_key}")
+public class PaymentProperties {
     private String testClientApiKey;
-
-    @Value("${payment.toss.test_secret_api_key}")
     private String testSecretApiKey;
-
-    @Value("${payment.toss.success_url}")
     private String successUrl;
-
-    @Value("${payment.toss.fail_url}")
     private String failUrl;
 
     public static final String CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";

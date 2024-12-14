@@ -1,7 +1,7 @@
 package com.tasksprints.auction.domain.payment.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tasksprints.auction.common.config.PaymentConfig;
+import com.tasksprints.auction.common.properties.PaymentProperties;
 import com.tasksprints.auction.domain.payment.api.Response;
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
@@ -23,24 +23,24 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TossPaymentClientImplTest {
+class TossPaymentImplTest {
 
     @Mock
     private HttpClientWrapper httpClientWrapper;
-    private PaymentConfig paymentConfig;
+    private PaymentProperties paymentProperties;
     private ObjectMapper objectMapper;
-    private PaymentClient tossPaymentClient;
+    private PaymentApiSerializer tossPaymentApiSerializer;
 
     @BeforeEach
     void setUp() {
-        paymentConfig = new PaymentConfig() {
+        paymentProperties = new PaymentProperties() {
             @Override
             public String getAuthorizations() {
                 return "https://api.test.com/payments";
             }
         };
         objectMapper = new ObjectMapper();
-        tossPaymentClient = new TossPaymentClientImpl(paymentConfig, objectMapper, httpClientWrapper);
+        tossPaymentApiSerializer = new TossPaymentImpl(paymentProperties, objectMapper, httpClientWrapper);
 
     }
 
@@ -56,7 +56,7 @@ class TossPaymentClientImplTest {
 
             when(httpClientWrapper.send(any(HttpRequest.class))).thenReturn(mockResponse);
             //when
-            Response<Object> response = tossPaymentClient.sendPaymentRequest(confirmRequest);
+            Response<Object> response = tossPaymentApiSerializer.sendPaymentRequest(confirmRequest);
             //then
             Assertions.assertThat(response.getStatusCode()).isEqualTo(200);
             Assertions.assertThat(response.getBody()).isInstanceOf(PaymentResponse.class);
@@ -74,7 +74,7 @@ class TossPaymentClientImplTest {
 
             when(httpClientWrapper.send(any(HttpRequest.class))).thenReturn(mockResponse);
             //when
-            Response<Object> response = tossPaymentClient.sendPaymentRequest(confirmRequest);
+            Response<Object> response = tossPaymentApiSerializer.sendPaymentRequest(confirmRequest);
             //then
             Assertions.assertThat(response.getStatusCode()).isEqualTo(404);
             Assertions.assertThat(response.getBody()).isInstanceOf(PaymentErrorResponse.class);
@@ -94,7 +94,7 @@ class TossPaymentClientImplTest {
 
             when(httpClientWrapper.send(any(HttpRequest.class))).thenReturn(mockResponse);
             //when
-            Response<Object> response = tossPaymentClient.cancelPaymentApproval(cancelRequest);
+            Response<Object> response = tossPaymentApiSerializer.cancelPaymentApproval(cancelRequest);
             //then
             Assertions.assertThat(response.getStatusCode()).isEqualTo(200);
             Assertions.assertThat(response.getBody()).isInstanceOf(PaymentResponse.class);
@@ -110,7 +110,7 @@ class TossPaymentClientImplTest {
 
             when(httpClientWrapper.send(any(HttpRequest.class))).thenReturn(mockResponse);
             //when
-            Response<Object> response = tossPaymentClient.cancelPaymentApproval(cancelRequest);
+            Response<Object> response = tossPaymentApiSerializer.cancelPaymentApproval(cancelRequest);
             //then
             Assertions.assertThat(response.getStatusCode()).isEqualTo(400);
             Assertions.assertThat(response.getBody()).isInstanceOf(PaymentErrorResponse.class);
