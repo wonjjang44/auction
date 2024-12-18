@@ -1,15 +1,17 @@
 package com.tasksprints.auction.common.handler;
 
+import com.tasksprints.auction.auction.exception.AuctionAlreadyClosedException;
+import com.tasksprints.auction.auction.exception.AuctionEndedException;
+import com.tasksprints.auction.auction.exception.AuctionNotFoundException;
+import com.tasksprints.auction.auction.exception.InvalidAuctionTimeException;
+import com.tasksprints.auction.bid.exception.BidNotFoundException;
+import com.tasksprints.auction.bid.exception.InvalidBidAmountException;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
-import com.tasksprints.auction.domain.auction.exception.AuctionAlreadyClosedException;
-import com.tasksprints.auction.domain.auction.exception.AuctionEndedException;
-import com.tasksprints.auction.domain.auction.exception.AuctionNotFoundException;
-import com.tasksprints.auction.domain.auction.exception.InvalidAuctionTimeException;
-import com.tasksprints.auction.domain.bid.exception.BidNotFoundException;
-import com.tasksprints.auction.domain.bid.exception.InvalidBidAmountException;
-import com.tasksprints.auction.domain.product.exception.ProductNotFoundException;
-import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
+import com.tasksprints.auction.payment.exception.InvalidSessionException;
+import com.tasksprints.auction.payment.exception.PaymentDataMismatchException;
+import com.tasksprints.auction.product.exception.ProductNotFoundException;
+import com.tasksprints.auction.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -58,6 +60,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuctionEndedException.class)
     public ResponseEntity<ApiResult<String>> handleAuctionEndedException(AuctionEndedException ex) {
         String message = "This auction has already ended.";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResult.failure(message));
+    }
+
+    @ExceptionHandler(InvalidSessionException.class)
+    public ResponseEntity<ApiResult<String>> handleInvalidSessionException(InvalidSessionException ex) {
+        String message = "Invalid Session Error. ";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResult.failure(message));
+    }
+
+    @ExceptionHandler(PaymentDataMismatchException.class)
+    public ResponseEntity<ApiResult<String>> PaymentDataMismatchException(PaymentDataMismatchException ex) {
+        String message = "Session Data Mismatch Error. ";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResult.failure(message));
     }
 
