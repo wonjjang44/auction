@@ -1,6 +1,5 @@
-package com.tasksprints.auction.user.application;
+package com.tasksprints.auction.user.application.service;
 
-import com.tasksprints.auction.user.domain.service.UserService;
 import com.tasksprints.auction.user.domain.dto.request.UserRequest;
 import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
 import com.tasksprints.auction.user.domain.dto.response.UserSummaryResponse;
@@ -60,4 +59,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user); // 상태 업데이트를 저장
     }
 
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+    }
 }

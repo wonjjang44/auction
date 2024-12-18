@@ -5,7 +5,7 @@ import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
 import com.tasksprints.auction.user.exception.UserNotFoundException;
 import com.tasksprints.auction.user.domain.entity.User;
 import com.tasksprints.auction.user.infrastructure.UserRepository;
-import com.tasksprints.auction.user.application.UserServiceImpl;
+import com.tasksprints.auction.user.application.service.UserServiceImpl;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

@@ -5,7 +5,7 @@ import com.tasksprints.auction.common.response.ApiResult;
 import com.tasksprints.auction.user.domain.dto.request.UserRequest;
 import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
 import com.tasksprints.auction.user.domain.dto.response.UserSummaryResponse;
-import com.tasksprints.auction.user.domain.service.UserService;
+import com.tasksprints.auction.user.application.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

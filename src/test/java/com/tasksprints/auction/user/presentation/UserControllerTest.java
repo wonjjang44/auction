@@ -1,13 +1,12 @@
 package com.tasksprints.auction.user.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tasksprints.auction.user.presentation.UserController;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.user.domain.dto.request.UserRequest;
 import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
 import com.tasksprints.auction.user.domain.dto.response.UserSummaryResponse;
 import com.tasksprints.auction.user.exception.UserNotFoundException;
-import com.tasksprints.auction.user.domain.service.UserService;
+import com.tasksprints.auction.user.application.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
