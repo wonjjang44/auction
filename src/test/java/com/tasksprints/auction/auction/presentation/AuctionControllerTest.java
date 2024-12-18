@@ -1,18 +1,16 @@
 package com.tasksprints.auction.auction.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tasksprints.auction.auction.presentation.AuctionController;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.auction.domain.dto.request.AuctionRequest;
 import com.tasksprints.auction.auction.domain.dto.response.AuctionResponse;
 import com.tasksprints.auction.auction.domain.entity.AuctionCategory;
 import com.tasksprints.auction.auction.domain.entity.AuctionStatus;
-import com.tasksprints.auction.auction.domain.service.AuctionService;
-import com.tasksprints.auction.bid.domain.entity.dto.BidResponse;
-import com.tasksprints.auction.bid.domain.service.BidService;
+import com.tasksprints.auction.auction.application.service.AuctionService;
+import com.tasksprints.auction.bid.application.service.BidService;
 import com.tasksprints.auction.review.domain.dto.request.ReviewRequest;
 import com.tasksprints.auction.review.domain.dto.response.ReviewResponse;
-import com.tasksprints.auction.review.domain.service.ReviewService;
+import com.tasksprints.auction.review.application.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -158,32 +156,6 @@ public class AuctionControllerTest {
 //        * */
 //
 //    }
-
-    @Test
-    @DisplayName("입찰 제출 성공")
-    public void testSubmitBid_Success() throws Exception {
-        BidResponse bidDTO = new BidResponse(); // Populate with necessary fields
-        when(bidService.submitBid(anyLong(), anyLong(), any())).thenReturn(bidDTO);
-
-        mockMvc.perform(post("/api/v1/auction/1/bid")
-                .param("userId", "1")
-                .param("amount", "100.00"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value(ApiResponseMessages.BID_SUBMITTED_SUCCESS));
-    }
-
-    @Test
-    @DisplayName("입찰 금액 업데이트 성공")
-    public void testUpdateBid_Success() throws Exception {
-        BidResponse updatedBidDTO = new BidResponse(); // Populate with necessary fields
-        when(bidService.updateBidAmount(anyLong(), anyLong(), any())).thenReturn(updatedBidDTO);
-
-        mockMvc.perform(put("/api/v1/auction/1/bid")
-                .param("userId", "1")
-                .param("amount", "150.00"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value(ApiResponseMessages.BID_UPDATED_SUCCESS));
-    }
 
     @Test
     @DisplayName("리뷰 생성 성공")

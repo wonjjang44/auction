@@ -4,7 +4,6 @@ import com.tasksprints.auction.auction.domain.dto.request.AuctionRequest;
 import com.tasksprints.auction.auction.domain.dto.response.AuctionResponse;
 import com.tasksprints.auction.auction.domain.entity.Auction;
 import com.tasksprints.auction.auction.domain.entity.AuctionStatus;
-import com.tasksprints.auction.auction.domain.service.AuctionService;
 import com.tasksprints.auction.auction.infrastructure.AuctionRepository;
 import com.tasksprints.auction.auction.exception.AuctionAlreadyClosedException;
 import com.tasksprints.auction.auction.exception.AuctionNotFoundException;
