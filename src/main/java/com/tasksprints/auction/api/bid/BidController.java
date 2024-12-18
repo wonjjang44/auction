@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -28,14 +29,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auction")
+@Slf4j
+@RequestMapping("/api/v1/bid")
 public class BidController {
     private final BidService bidService;
     private final ChatService chatService;
     private final UserService userService;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
-    @MessageMapping("/bid")
+    @MessageMapping("/apply")
     public void handleBid(BidRequest bidRequest) {
         /**
          * 입찰하는거 여기다가 추가하면 좋을 듯 합니다.
@@ -54,36 +56,39 @@ public class BidController {
         simpMessageSendingOperations.convertAndSend("/bid/" + bidResponse.getUuid(), bidResponse);
     }
 
-    @PostMapping("/{auctionId}/bid")
+    @PostMapping()
     @Operation(summary = "Submit a bid", description = "Submits a bid for the specified auction.")
     @ApiResponse(responseCode = "200", description = "Bid submitted successfully")
     public ResponseEntity<ApiResult<BidResponse>> submitBid(
+        @Parameter(description = "auction ID") @RequestParam Long auctionId,
         @Parameter(description = "ID of the user submitting the bid") @RequestParam Long userId,
-        @PathVariable Long auctionId, @Parameter(description = "Bid amount") @RequestParam BigDecimal amount) {
+        @Parameter(description = "Bid amount") @RequestParam BigDecimal amount) {
         BidResponse bid = bidService.submitBid(userId, auctionId, amount);
         User user = userService.getUserById(userId);
         chatService.createRoom(new AddChatRoomDto(bid.getName(), user)); //입찰 생성 시 채팅방 생성 후 저장
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_SUBMITTED_SUCCESS, bid));
     }
 
-    @PutMapping("/{auctionId}/bid")
+    @PutMapping()
     @Operation(summary = "Update a bid", description = "Updates the amount of an existing bid.")
     @ApiResponse(responseCode = "200", description = "Bid updated successfully")
     public ResponseEntity<ApiResult<BidResponse>> updateBid(
+        @Parameter(description = "auctionId") @RequestParam Long auctionId,
         @Parameter(description = "ID of the user updating the bid") @RequestParam Long userId,
-        @PathVariable Long auctionId, @Parameter(description = "New bid amount") @RequestParam BigDecimal amount) {
+        @Parameter(description = "New bid amount") @RequestParam BigDecimal amount) {
+        log.info("a");
         BidResponse updatedBid = bidService.updateBidAmount(userId, auctionId, amount);
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_UPDATED_SUCCESS, updatedBid));
     }
 
-    @GetMapping("/{auctionId}/bid/status")
-    @Operation(summary = "Check user bid status", description = "Checks if the user has already placed a bid on the auction.")
-    @ApiResponse(responseCode = "200", description = "Bid status checked successfully")
-    public ResponseEntity<ApiResult<Boolean>> checkUserBidStatus(@PathVariable Long auctionId,
-                                                                 @Parameter(description = "ID of the user") @RequestParam Long userId) {
-        Boolean hasBid = bidService.hasUserAlreadyBid(auctionId);
-        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_STATUS_CHECKED, hasBid));
-    }
+//    @GetMapping("/{auctionId}/bid/status")
+//    @Operation(summary = "Check user bid status", description = "Checks if the user has already placed a bid on the auction.")
+//    @ApiResponse(responseCode = "200", description = "Bid status checked successfully")
+//    public ResponseEntity<ApiResult<Boolean>> checkUserBidStatus(@PathVariable Long auctionId,
+//                                                                 @Parameter(description = "ID of the user") @RequestParam Long userId) {
+//        Boolean hasBid = bidService.hasUserAlreadyBid(auctionId);
+//        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_STATUS_CHECKED, hasBid));
+//    }
 
     @GetMapping("/bid/{uuid}")
     @Operation(summary = "Get a bid", description = "Get a bid by bid uuid")
