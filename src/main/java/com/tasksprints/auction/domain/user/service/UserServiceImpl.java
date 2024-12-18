@@ -22,12 +22,11 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final WalletRepository walletRepository;
 
-    @Transactional
     @Override
     public UserDetailResponse createUser(UserRequest.Register request) {
-        User user = User.createWithWallet(request.getName(), request.getEmail(), request.getPassword(), request.getNickname());
+        User user = User.create(request.getName(), request.getEmail(), request.getPassword(), request.getNickname());
+
         User newUser = userRepository.save(user);
         return UserDetailResponse.of(newUser);
     }
@@ -66,14 +65,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(Long id){
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
     }
-
-//    private Wallet createWalletForUser(User user) {
-//        return Optional.ofNullable(Wallet.create(user))
-//            .orElseThrow(() -> new WalletCreationException("Failed to create wallet for user: " + user.getEmail()));
-//    }
-
-
 }
