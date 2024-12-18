@@ -45,11 +45,20 @@ public class User extends BaseEntityWithUpdate {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
+    
 //    추후 추가
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 //    @Builder.Default
 //    private List<Bid> bids = new ArrayList<>();
 
+    public static User create(String name, String email, String password, String nickName) {
+        return User.builder()
+            .name(name)
+            .email(email)
+            .password(password)
+            .nickName(nickName)
+            .build();
+    }
     /**
      * @descripton static factory pattern을 적용하여, 구현
      */
