@@ -29,6 +29,9 @@ spring:
     mode: HTML
     encoding: UTF-8
     cache: false
+  profiles:
+    include:
+      -jwt
 
 springdoc:
   api-docs:
