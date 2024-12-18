@@ -5,6 +5,7 @@ import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
 import com.tasksprints.auction.domain.user.dto.response.UserSummaryResponse;
 import com.tasksprints.auction.domain.user.model.User;
 
+import com.tasksprints.auction.domain.user.model.User;
 import java.util.List;
 
 public interface UserService {

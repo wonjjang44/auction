@@ -36,6 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-
 ### yml file ###
 /src/main/resources/application-payment.yml
+/src/main/resources/application-jwt.yml

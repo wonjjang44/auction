@@ -75,4 +75,5 @@ public class UserServiceImpl implements UserService {
 //            .orElseThrow(() -> new WalletCreationException("Failed to create wallet for user: " + user.getEmail()));
 //    }
 
+
 }

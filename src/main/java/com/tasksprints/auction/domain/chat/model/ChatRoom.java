@@ -1,5 +1,6 @@
-package com.tasksprints.auction.domain.socket.model;
+package com.tasksprints.auction.domain.chat.model;
 
+import com.tasksprints.auction.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,16 +25,21 @@ public class ChatRoom {
     private String chatRoomId;
 
     @Column(name = "name")
-    private String name;
+    private String name; //채팅방 이름은 상품 이름으로 하면 좋을 것 같습니다.
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner; //입찰자 -> 입찰 불가하도록 ? 설정 후 메시지 보내기 금지
 
     @OneToMany
-    @Column(name = "chatterList")
-    private List<Chatter> chatters;
+    @Column(name = "chat_users")
+    private List<User> users;
 
     @Builder
-    public ChatRoom(String name) {
+    public ChatRoom(String name, User owner) {
         this.chatRoomId = UUID.randomUUID().toString();
         this.name = name;
-        this.chatters = new ArrayList<>();
+        this.owner = owner;
+        this.users = new ArrayList<>();
     }
 }
