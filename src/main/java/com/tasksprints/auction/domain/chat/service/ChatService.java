@@ -1,6 +1,5 @@
 package com.tasksprints.auction.domain.chat.service;
 
-import com.tasksprints.auction.domain.chat.dto.AddChatRoomDto;
 import com.tasksprints.auction.domain.chat.dto.MessageDto;
 import com.tasksprints.auction.domain.chat.model.ChatRoom;
 import com.tasksprints.auction.domain.user.model.User;
@@ -18,5 +17,5 @@ public interface ChatService {
 
     void processMessage(String sender, MessageDto messageDto);
 
-    void createRoom(AddChatRoomDto addChatRoomDto);
+    void createRoom(String name, User owner);
 }

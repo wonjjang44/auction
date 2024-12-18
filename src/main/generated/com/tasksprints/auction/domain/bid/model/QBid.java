@@ -56,7 +56,7 @@ public class QBid extends EntityPathBase<Bid> {
     public QBid(Class<? extends Bid> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.auction = inits.isInitialized("auction") ? new com.tasksprints.auction.domain.auction.model.QAuction(forProperty("auction"), inits.get("auction")) : null;
-        this.user = inits.isInitialized("user") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("user"), inits.get("user")) : null;
     }
 
 }

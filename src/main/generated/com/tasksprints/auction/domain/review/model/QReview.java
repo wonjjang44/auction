@@ -51,7 +51,7 @@ public class QReview extends EntityPathBase<Review> {
     public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.auction = inits.isInitialized("auction") ? new com.tasksprints.auction.domain.auction.model.QAuction(forProperty("auction"), inits.get("auction")) : null;
-        this.writer = inits.isInitialized("writer") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("writer")) : null;
+        this.writer = inits.isInitialized("writer") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("writer"), inits.get("writer")) : null;
     }
 
 }

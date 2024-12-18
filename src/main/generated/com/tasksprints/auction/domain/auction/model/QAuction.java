@@ -66,7 +66,7 @@ public class QAuction extends EntityPathBase<Auction> {
     public QAuction(Class<? extends Auction> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.product = inits.isInitialized("product") ? new com.tasksprints.auction.domain.product.model.QProduct(forProperty("product"), inits.get("product")) : null;
-        this.seller = inits.isInitialized("seller") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("seller")) : null;
+        this.seller = inits.isInitialized("seller") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("seller"), inits.get("seller")) : null;
     }
 
 }

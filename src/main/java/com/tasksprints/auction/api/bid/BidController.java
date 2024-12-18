@@ -5,7 +5,6 @@ import com.tasksprints.auction.common.response.ApiResult;
 import com.tasksprints.auction.domain.bid.dto.BidRequest;
 import com.tasksprints.auction.domain.bid.dto.BidResponse;
 import com.tasksprints.auction.domain.bid.service.BidService;
-import com.tasksprints.auction.domain.chat.dto.AddChatRoomDto;
 import com.tasksprints.auction.domain.chat.service.ChatService;
 import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
 import com.tasksprints.auction.domain.user.model.User;
@@ -65,7 +64,7 @@ public class BidController {
         @Parameter(description = "Bid amount") @RequestParam BigDecimal amount) {
         BidResponse bid = bidService.submitBid(userId, auctionId, amount);
         User user = userService.getUserById(userId);
-        chatService.createRoom(new AddChatRoomDto(bid.getName(), user)); //입찰 생성 시 채팅방 생성 후 저장
+        chatService.createRoom(bid.getName(), user); //입찰 생성 시 채팅방 생성 후 저장
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_SUBMITTED_SUCCESS, bid));
     }
 

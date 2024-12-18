@@ -50,7 +50,7 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public QChatRoom(Class<? extends ChatRoom> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.owner = inits.isInitialized("owner") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("owner")) : null;
+        this.owner = inits.isInitialized("owner") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("owner"), inits.get("owner")) : null;
     }
 
 }

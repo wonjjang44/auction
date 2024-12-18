@@ -60,7 +60,7 @@ public class QProduct extends EntityPathBase<Product> {
     public QProduct(Class<? extends Product> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.auction = inits.isInitialized("auction") ? new com.tasksprints.auction.domain.auction.model.QAuction(forProperty("auction"), inits.get("auction")) : null;
-        this.owner = inits.isInitialized("owner") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("owner")) : null;
+        this.owner = inits.isInitialized("owner") ? new com.tasksprints.auction.domain.user.model.QUser(forProperty("owner"), inits.get("owner")) : null;
     }
 
 }
