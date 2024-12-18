@@ -31,4 +31,8 @@ public class ApiResponseMessages {
     public static final String REVIEW_RETRIEVED = "Review successfully retrieved";
 
     // Additional messages can be defined as needed
+
+    // PAYMENT
+    public static final String PAYMENT_PREPARED_SUCCESS = "Payment prepared successfully";
+    public static final String PAYMENT_SUCCESS = "Payment completed and wallet charged successfully";
 }

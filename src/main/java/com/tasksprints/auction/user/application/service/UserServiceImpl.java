@@ -1,11 +1,11 @@
-package com.tasksprints.auction.user.application.service;
+package com.tasksprints.auction.domain.user.service;
 
-import com.tasksprints.auction.user.domain.dto.request.UserRequest;
-import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
-import com.tasksprints.auction.user.domain.dto.response.UserSummaryResponse;
-import com.tasksprints.auction.user.exception.UserNotFoundException;
-import com.tasksprints.auction.user.domain.entity.User;
-import com.tasksprints.auction.user.infrastructure.UserRepository;
+import com.tasksprints.auction.domain.user.dto.request.UserRequest;
+import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
+import com.tasksprints.auction.domain.user.dto.response.UserSummaryResponse;
+import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
+import com.tasksprints.auction.domain.user.model.User;
+import com.tasksprints.auction.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

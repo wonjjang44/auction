@@ -36,7 +36,7 @@ public class AuctionInitializer implements ApplicationRunner {
     }
 
     private void createDummyUser() {
-        User user1 = User.create("name", "email@email.com", "password", "NickName");
+        User user1 = User.createWithWallet("name", "email@email.com", "password", "NickName");
         userRepository.save(user1);
     }
 
@@ -57,7 +57,7 @@ public class AuctionInitializer implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        User user = userRepository.save(User.create("name", "email@email.com", "password", "NickName"));
+        User user = userRepository.save(User.createWithWallet("name", "email@email.com", "password", "NickName"));
 
         // 각 제품에 대해 새로운 경매를 생성
         for (int i = 0; i < 100; i++) {

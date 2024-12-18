@@ -47,7 +47,7 @@ class UserControllerTest {
         @Test
         @DisplayName("POST /api/v1/user - 성공")
         void registerUser() throws Exception {
-            UserDetailResponse userDetailResponse = new UserDetailResponse(1L, "John", "john@example.com", "password", "john123");
+            UserDetailResponse userDetailResponse = new UserDetailResponse(1L, "John", "john@example.com", "password", "john123", "1L");
 
             Mockito.when(userService.createUser(any(UserRequest.Register.class))).thenReturn(userDetailResponse);
 
@@ -66,7 +66,7 @@ class UserControllerTest {
         @Test
         @DisplayName("GET /api/v1/user/{id} - 성공")
         void getUserById() throws Exception {
-            UserDetailResponse userDetailResponse = new UserDetailResponse(1L, "John", "john@example.com", "password", "john123");
+            UserDetailResponse userDetailResponse = new UserDetailResponse(1L, "John", "john@example.com", "password", "john123", "1L");
 
             Mockito.when(userService.getUserDetailsById(anyLong())).thenReturn(userDetailResponse);
 
@@ -96,7 +96,7 @@ class UserControllerTest {
         @Test
         @DisplayName("PUT /api/v1/user - 성공")
         void updateUser() throws Exception {
-            UserDetailResponse userDetailResponse = new UserDetailResponse(1L, "John Updated", "john@example.com", "newpassword", "john123updated");
+            UserDetailResponse userDetailResponse = new UserDetailResponse(1L, "John Updated", "john@example.com", "newpassword", "john123updated", "1L");
 
             Mockito.when(userService.updateUser(anyLong(), any(UserRequest.Update.class))).thenReturn(userDetailResponse);
 

@@ -1,7 +1,7 @@
-package com.tasksprints.auction.user.domain.entity;
+package com.tasksprints.auction.domain.user.model;
 
 import com.tasksprints.auction.common.entity.BaseEntityWithUpdate;
-import com.tasksprints.auction.auction.domain.entity.Auction;
+import com.tasksprints.auction.domain.auction.model.Auction;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
