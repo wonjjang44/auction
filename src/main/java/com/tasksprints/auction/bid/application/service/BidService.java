@@ -1,6 +1,6 @@
-package com.tasksprints.auction.bid.domain.service;
+package com.tasksprints.auction.bid.application.service;
 
-import com.tasksprints.auction.bid.domain.entity.dto.BidResponse;
+import com.tasksprints.auction.bid.domain.dto.BidResponse;
 
 import java.math.BigDecimal;
 
@@ -16,4 +16,6 @@ public interface BidService {
     Boolean hasUserAlreadyBid(Long auctionId);
 
     BidResponse getBidByUuid(String uuid);
+
+    boolean isBidEnd(Long auctionId);
 }

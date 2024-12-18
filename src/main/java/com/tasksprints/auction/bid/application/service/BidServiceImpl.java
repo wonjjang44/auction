@@ -1,6 +1,6 @@
-package com.tasksprints.auction.bid.application;
+package com.tasksprints.auction.bid.application.service;
 
-import com.tasksprints.auction.bid.domain.service.BidService;
+import com.tasksprints.auction.bid.application.service.BidService;
 import com.tasksprints.auction.bid.exception.BidNotFoundException;
 import com.tasksprints.auction.bid.exception.InvalidBidAmountException;
 import com.tasksprints.auction.bid.domain.entity.Bid;
@@ -9,7 +9,7 @@ import com.tasksprints.auction.auction.exception.AuctionEndedException;
 import com.tasksprints.auction.auction.exception.AuctionNotFoundException;
 import com.tasksprints.auction.auction.domain.entity.Auction;
 import com.tasksprints.auction.auction.infrastructure.AuctionRepository;
-import com.tasksprints.auction.bid.domain.entity.dto.BidResponse;
+import com.tasksprints.auction.bid.domain.dto.BidResponse;
 import com.tasksprints.auction.user.exception.UserNotFoundException;
 import com.tasksprints.auction.user.domain.entity.User;
 import com.tasksprints.auction.user.infrastructure.UserRepository;
@@ -95,5 +95,13 @@ public class BidServiceImpl implements BidService {
         Bid bid = bidRepository.findByUuid(uuid)
                 .orElseThrow(() -> new BidNotFoundException("Bid not found"));
         return BidResponse.of(bid);
+    }
+
+    @Override
+    public boolean isBidEnd(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId)
+            .orElseThrow(() -> new AuctionNotFoundException("Auction not found"));
+
+        return auction.getEndTime().isBefore(LocalDateTime.now());
     }
 }

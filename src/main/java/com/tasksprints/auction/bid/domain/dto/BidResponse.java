@@ -1,5 +1,4 @@
 package com.tasksprints.auction.bid.domain.dto;
-
 import com.tasksprints.auction.bid.domain.entity.Bid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
