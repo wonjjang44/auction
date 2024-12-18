@@ -1,4 +1,4 @@
-package com.tasksprints.auction.product.domain.service;
+package com.tasksprints.auction.product.application.service;
 
 import com.tasksprints.auction.product.domain.dto.request.ProductRequest;
 import com.tasksprints.auction.product.domain.dto.response.ProductResponse;

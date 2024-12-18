@@ -4,6 +4,7 @@ import com.tasksprints.auction.auction.domain.entity.Auction;
 import com.tasksprints.auction.auction.domain.entity.AuctionCategory;
 import com.tasksprints.auction.auction.domain.entity.AuctionStatus;
 import com.tasksprints.auction.auction.infrastructure.AuctionRepository;
+import com.tasksprints.auction.product.application.service.ProductServiceImpl;
 import com.tasksprints.auction.product.domain.dto.request.ProductRequest;
 import com.tasksprints.auction.product.domain.dto.response.ProductResponse;
 import com.tasksprints.auction.product.exception.ProductNotFoundException;

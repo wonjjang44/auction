@@ -1,11 +1,10 @@
 package com.tasksprints.auction.product.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tasksprints.auction.product.presentation.ProductController;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.product.domain.dto.request.ProductRequest;
 import com.tasksprints.auction.product.domain.dto.response.ProductResponse;
-import com.tasksprints.auction.product.domain.service.ProductService;
+import com.tasksprints.auction.product.application.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

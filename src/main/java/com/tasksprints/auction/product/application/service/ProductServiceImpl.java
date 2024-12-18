@@ -1,11 +1,10 @@
-package com.tasksprints.auction.product.application;
+package com.tasksprints.auction.product.application.service;
 
 import com.tasksprints.auction.auction.exception.AuctionNotFoundException;
 import com.tasksprints.auction.auction.domain.entity.Auction;
 import com.tasksprints.auction.auction.infrastructure.AuctionRepository;
 import com.tasksprints.auction.product.domain.dto.request.ProductRequest;
 import com.tasksprints.auction.product.domain.dto.response.ProductResponse;
-import com.tasksprints.auction.product.domain.service.ProductService;
 import com.tasksprints.auction.product.exception.ProductImageUploadException;
 import com.tasksprints.auction.product.exception.ProductNotFoundException;
 import com.tasksprints.auction.product.domain.entity.Product;
