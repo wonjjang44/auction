@@ -1,5 +1,6 @@
 package com.tasksprints.auction.api.chat;
 
+import com.tasksprints.auction.domain.chat.annotation.ChatValidation;
 import com.tasksprints.auction.domain.chat.dto.MessageDto;
 import com.tasksprints.auction.domain.chat.dto.MessageDto.MessageType;
 import com.tasksprints.auction.domain.chat.dto.WhisperDto;
@@ -20,9 +21,6 @@ public class ChatController {
 
     @MessageMapping("/chat/message")
     public void message(MessageDto messageDto) {
-        if (chatService.isUserOwner(messageDto.getRoomId(), messageDto.getSender())) {
-            return;
-        } //메시지 전송자가 경매자라면 메시지 전송 금지
         String sender = userService.getUserDetailsById(messageDto.getSender()).getNickName();
         chatService.processMessage(sender, messageDto);
         simpMessageSendingOperations.convertAndSend("/topic/chat/room/" + messageDto.getRoomId(), messageDto);
@@ -30,10 +28,6 @@ public class ChatController {
 
     @MessageMapping("/chat/message/whisper")
     public void messageToOne(WhisperDto whisperDto) {
-        if (chatService.isUserOwner(whisperDto.getRoomId(), whisperDto.getSender())) {
-            return;
-        } //메시지 전송자가 경매자라면 메시지 전송 금지
-
         String sender = userService.getUserDetailsById(whisperDto.getSender()).getNickName();
         whisperDto.setMessage("[귓속말] " + sender + " : " + whisperDto.getMessage());
         simpMessageSendingOperations.convertAndSend("/whisper/" + whisperDto.getReceiver(), whisperDto);
