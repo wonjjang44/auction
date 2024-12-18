@@ -1,10 +1,11 @@
-package com.tasksprints.auction.domain.payment.repository;
+package com.tasksprints.auction.payment.infrastructure;
 
 import com.tasksprints.auction.common.config.QueryDslConfig;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
-import com.tasksprints.auction.domain.payment.model.PayStatus;
-import com.tasksprints.auction.domain.payment.model.PayType;
-import com.tasksprints.auction.domain.payment.model.Payment;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
+import com.tasksprints.auction.payment.domain.entity.PayStatus;
+import com.tasksprints.auction.payment.domain.entity.PayType;
+import com.tasksprints.auction.payment.domain.entity.Payment;
+import com.tasksprints.auction.payment.infrastructure.PaymentRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

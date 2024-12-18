@@ -1,13 +1,13 @@
-package com.tasksprints.auction.domain.payment.service;
+package com.tasksprints.auction.payment.application.service;
 
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.client.PaymentApiSerializer;
-import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
-import com.tasksprints.auction.domain.payment.model.Payment;
-import com.tasksprints.auction.domain.payment.repository.PaymentRepository;
-import com.tasksprints.auction.domain.wallet.model.Wallet;
-import com.tasksprints.auction.domain.wallet.service.WalletService;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.infrastructure.client.PaymentApiSerializer;
+import com.tasksprints.auction.payment.domain.dto.request.PaymentRequest;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
+import com.tasksprints.auction.payment.domain.entity.Payment;
+import com.tasksprints.auction.payment.infrastructure.PaymentRepository;
+import com.tasksprints.auction.wallet.domain.entity.Wallet;
+import com.tasksprints.auction.wallet.application.service.WalletService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    Response<Object> handlePaymentFailure(Response<Object> response) {
+    public Response<Object> handlePaymentFailure(Response<Object> response) {
         log.info("결제 실패");
         return response;
     }

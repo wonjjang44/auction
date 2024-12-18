@@ -1,13 +1,13 @@
-package com.tasksprints.auction.api.payment;
+package com.tasksprints.auction.payment.presentation;
 
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
-import com.tasksprints.auction.domain.payment.exception.InvalidSessionException;
-import com.tasksprints.auction.domain.payment.exception.PaymentDataMismatchException;
-import com.tasksprints.auction.domain.payment.service.PaymentService;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.domain.dto.request.PaymentRequest;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
+import com.tasksprints.auction.payment.exception.InvalidSessionException;
+import com.tasksprints.auction.payment.exception.PaymentDataMismatchException;
+import com.tasksprints.auction.payment.application.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpSession;

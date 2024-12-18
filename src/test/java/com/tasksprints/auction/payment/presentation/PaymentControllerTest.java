@@ -1,13 +1,13 @@
-package com.tasksprints.auction.api;
+package com.tasksprints.auction.payment.presentation;
 
-import com.tasksprints.auction.api.payment.PaymentController;
+import com.tasksprints.auction.payment.presentation.PaymentController;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
-import com.tasksprints.auction.domain.payment.exception.InvalidSessionException;
-import com.tasksprints.auction.domain.payment.exception.PaymentDataMismatchException;
-import com.tasksprints.auction.domain.payment.service.PaymentService;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentErrorResponse;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
+import com.tasksprints.auction.payment.exception.InvalidSessionException;
+import com.tasksprints.auction.payment.exception.PaymentDataMismatchException;
+import com.tasksprints.auction.payment.application.service.PaymentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -1,6 +1,7 @@
-package com.tasksprints.auction.domain.payment.client;
+package com.tasksprints.auction.payment.infrastructure.client;
 
-import com.tasksprints.auction.domain.payment.api.Response;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.infrastructure.client.ClientWrapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

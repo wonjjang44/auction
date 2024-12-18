@@ -1,7 +1,7 @@
-package com.tasksprints.auction.domain.payment.dto.request;
+package com.tasksprints.auction.payment.domain.dto.request;
 
-import com.tasksprints.auction.domain.payment.model.PayType;
-import com.tasksprints.auction.domain.payment.model.Payment;
+import com.tasksprints.auction.payment.domain.entity.PayType;
+import com.tasksprints.auction.payment.domain.entity.Payment;
 import lombok.*;
 
 import java.math.BigDecimal;

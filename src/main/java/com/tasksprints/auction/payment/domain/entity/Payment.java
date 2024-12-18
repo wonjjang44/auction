@@ -1,8 +1,8 @@
-package com.tasksprints.auction.domain.payment.model;
+package com.tasksprints.auction.payment.domain.entity;
 
 import com.tasksprints.auction.common.entity.BaseEntityWithUpdate;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
-import com.tasksprints.auction.domain.wallet.model.Wallet;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
+import com.tasksprints.auction.wallet.domain.entity.Wallet;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

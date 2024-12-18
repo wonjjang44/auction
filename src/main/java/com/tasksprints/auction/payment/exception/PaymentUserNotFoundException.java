@@ -1,4 +1,4 @@
-package com.tasksprints.auction.domain.payment.exception;
+package com.tasksprints.auction.payment.exception;
 
 public class PaymentUserNotFoundException extends RuntimeException {
     public PaymentUserNotFoundException(String message) {

@@ -1,11 +1,14 @@
-package com.tasksprints.auction.domain.payment.client;
+package com.tasksprints.auction.payment.infrastructure.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.common.properties.PaymentProperties;
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.infrastructure.client.HttpClientWrapper;
+import com.tasksprints.auction.payment.infrastructure.client.PaymentApiSerializer;
+import com.tasksprints.auction.payment.infrastructure.client.TossPaymentImpl;
+import com.tasksprints.auction.payment.domain.dto.request.PaymentRequest;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentErrorResponse;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

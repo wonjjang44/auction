@@ -1,14 +1,15 @@
-package com.tasksprints.auction.domain.payment.service;
+package com.tasksprints.auction.payment.application;
 
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.client.PaymentApiSerializer;
-import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
-import com.tasksprints.auction.domain.payment.model.Payment;
-import com.tasksprints.auction.domain.payment.repository.PaymentRepository;
-import com.tasksprints.auction.domain.wallet.model.Wallet;
-import com.tasksprints.auction.domain.wallet.service.WalletService;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.infrastructure.client.PaymentApiSerializer;
+import com.tasksprints.auction.payment.domain.dto.request.PaymentRequest;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentErrorResponse;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
+import com.tasksprints.auction.payment.domain.entity.Payment;
+import com.tasksprints.auction.payment.infrastructure.PaymentRepository;
+import com.tasksprints.auction.payment.application.service.PaymentServiceImpl;
+import com.tasksprints.auction.wallet.domain.entity.Wallet;
+import com.tasksprints.auction.wallet.application.service.WalletService;
 import com.tasksprints.auction.user.domain.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

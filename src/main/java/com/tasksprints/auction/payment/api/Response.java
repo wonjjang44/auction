@@ -1,4 +1,4 @@
-package com.tasksprints.auction.domain.payment.api;
+package com.tasksprints.auction.payment.api;
 
 import lombok.Getter;
 

@@ -1,8 +1,8 @@
-package com.tasksprints.auction.domain.payment.service;
+package com.tasksprints.auction.payment.application.service;
 
 
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.domain.dto.request.PaymentRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;

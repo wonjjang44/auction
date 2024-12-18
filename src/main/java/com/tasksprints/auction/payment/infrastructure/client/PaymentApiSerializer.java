@@ -1,7 +1,7 @@
-package com.tasksprints.auction.domain.payment.client;
+package com.tasksprints.auction.payment.infrastructure.client;
 
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.domain.dto.request.PaymentRequest;
 
 import java.io.IOException;
 

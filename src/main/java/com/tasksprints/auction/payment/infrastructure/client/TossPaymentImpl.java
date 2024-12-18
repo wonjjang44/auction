@@ -1,13 +1,13 @@
-package com.tasksprints.auction.domain.payment.client;
+package com.tasksprints.auction.payment.infrastructure.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tasksprints.auction.common.properties.PaymentProperties;
-import com.tasksprints.auction.domain.payment.api.Response;
-import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentErrorResponse;
-import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
+import com.tasksprints.auction.payment.api.Response;
+import com.tasksprints.auction.payment.domain.dto.request.PaymentRequest;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentErrorResponse;
+import com.tasksprints.auction.payment.domain.dto.response.PaymentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

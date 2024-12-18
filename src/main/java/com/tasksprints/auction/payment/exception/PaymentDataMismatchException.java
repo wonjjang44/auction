@@ -1,4 +1,4 @@
-package com.tasksprints.auction.domain.payment.exception;
+package com.tasksprints.auction.payment.exception;
 
 public class PaymentDataMismatchException extends RuntimeException {
     public PaymentDataMismatchException(String message) {

@@ -1,4 +1,4 @@
-package com.tasksprints.auction.domain.payment.dto.response;
+package com.tasksprints.auction.payment.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
