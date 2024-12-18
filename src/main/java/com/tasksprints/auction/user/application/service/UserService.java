@@ -1,10 +1,10 @@
-package com.tasksprints.auction.domain.user.service;
+package com.tasksprints.auction.user.application.service;
 
-import com.tasksprints.auction.domain.user.dto.request.UserRequest;
-import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
-import com.tasksprints.auction.domain.user.dto.response.UserSummaryResponse;
+import com.tasksprints.auction.user.domain.dto.request.UserRequest;
+import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
+import com.tasksprints.auction.user.domain.dto.response.UserSummaryResponse;
+import com.tasksprints.auction.user.domain.entity.User;
 
-import com.tasksprints.auction.domain.user.model.User;
 import java.util.List;
 
 public interface UserService {
