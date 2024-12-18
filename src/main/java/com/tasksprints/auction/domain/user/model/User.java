@@ -2,6 +2,7 @@ package com.tasksprints.auction.domain.user.model;
 
 import com.tasksprints.auction.common.entity.BaseEntityWithUpdate;
 import com.tasksprints.auction.domain.auction.model.Auction;
+import com.tasksprints.auction.domain.wallet.model.Wallet;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
@@ -40,14 +41,16 @@ public class User extends BaseEntityWithUpdate {
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Auction> auctions = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
+    
 //    추후 추가
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 //    @Builder.Default
 //    private List<Bid> bids = new ArrayList<>();
 
-    /**
-     * @descripton static factory pattern을 적용하여, 구현
-     */
     public static User create(String name, String email, String password, String nickName) {
         return User.builder()
             .name(name)
@@ -56,6 +59,25 @@ public class User extends BaseEntityWithUpdate {
             .nickName(nickName)
             .build();
     }
+    /**
+     * @descripton static factory pattern을 적용하여, 구현
+     */
+    public static User createWithWallet(String name, String email, String password, String nickName) {
+        User user = User.builder()
+            .name(name)
+            .email(email)
+            .password(password)
+            .nickName(nickName)
+            .build();
+        Wallet wallet = Wallet.create(user);
+        user.addWallet(wallet);
+        return user;
+    }
+//    public Wallet createWalletForUser(User user) {
+//        Wallet wallet = new Wallet();
+//        wallet.setUser(user);
+//        return wallet;
+//    }
 
     public void setAuctions(List<Auction> auctions) {
         this.auctions = auctions;
@@ -78,5 +100,10 @@ public class User extends BaseEntityWithUpdate {
 
     public void addAuction(Auction auction) {
         this.auctions.add(auction);
+    }
+
+    public void addWallet(Wallet wallet) {
+        this.wallet = wallet;
+        wallet.addUser(this);
     }
 }

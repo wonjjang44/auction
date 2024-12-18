@@ -56,14 +56,7 @@ public class Auction extends BaseEntity {
     private List<Bid> bids = new ArrayList<>();
 
     @Column(nullable = false)
-    private Long viewCount;
-
-    @PrePersist
-        protected void onCreate() {
-            if (viewCount == null) {
-                viewCount = 0L;  // 기본값 설정
-            }
-        }
+    private long viewCount = 0L;
 
     public static Auction create(LocalDateTime startTime, LocalDateTime endTime, BigDecimal startingBid, AuctionCategory auctionCategory, AuctionStatus auctionStatus, User seller) {
         Auction newAuction = Auction.builder()
@@ -88,9 +81,6 @@ public class Auction extends BaseEntity {
     }
 
     public void incrementViewCount() {
-        if (viewCount == null) {
-            viewCount = 0L;
-        }
         this.viewCount += 1;
     }
 

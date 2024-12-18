@@ -12,6 +12,7 @@ public class UserDetailResponse {
     private String email;
     private String password;
     private String nickName;
+    private String walletId;
 
     private UserDetailResponse(User user) {
         this.id = user.getId();
@@ -19,6 +20,7 @@ public class UserDetailResponse {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.nickName = user.getNickName();
+        this.walletId = String.valueOf(user.getWallet().getId());
     }
 
     public static UserDetailResponse of(User user) {

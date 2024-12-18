@@ -6,11 +6,13 @@ import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
 import com.tasksprints.auction.domain.user.model.User;
 import com.tasksprints.auction.domain.user.repository.UserRepository;
 import com.tasksprints.auction.domain.user.service.UserServiceImpl;
+import com.tasksprints.auction.domain.wallet.model.Wallet;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -19,11 +21,10 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
-
     @InjectMocks
     private UserServiceImpl userService;
-
     private User existingUser;
+    private Wallet existingWallet;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +35,17 @@ public class UserServiceImplTest {
             .nickName("testNick")
             .password("testPassword")
             .email("test@example.com")
+            .wallet(existingWallet)
             .build();
+
+        existingWallet = Wallet.builder()
+            .id(1L)
+            .balance(BigDecimal.ZERO)
+            .userName(existingUser.getName())
+            .user(existingUser)
+            .build();
+
+        existingUser.addWallet(existingWallet);
     }
 
     @Nested
@@ -47,7 +58,6 @@ public class UserServiceImplTest {
             // Arrange
             UserRequest.Register request = new UserRequest.Register("testUser", "test@example.com", "testPassword", "testNick");
             when(userRepository.save(any(User.class))).thenReturn(existingUser);
-
             // Act
             UserDetailResponse createdUser = userService.createUser(request);
 

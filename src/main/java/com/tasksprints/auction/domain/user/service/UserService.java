@@ -3,6 +3,7 @@ package com.tasksprints.auction.domain.user.service;
 import com.tasksprints.auction.domain.user.dto.request.UserRequest;
 import com.tasksprints.auction.domain.user.dto.response.UserDetailResponse;
 import com.tasksprints.auction.domain.user.dto.response.UserSummaryResponse;
+import com.tasksprints.auction.domain.user.model.User;
 
 import com.tasksprints.auction.domain.user.model.User;
 import java.util.List;

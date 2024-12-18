@@ -29,12 +29,10 @@ public class AuctionCriteriaRepositoryImpl implements AuctionCriteriaRepository 
         List<Auction> result = buildQueryWithPaginationAndSorting(builder, pageable, sortOrder);
 
         // int 오버플로 주의
-//        int total = queryFactory
-//            .selectFrom(auction)
-//            .where(builder)
-//            .fetch().size();
-
-        long total = result.size();
+        int total = queryFactory
+            .selectFrom(auction)
+            .where(builder)
+            .fetch().size();
 
         return new PageImpl<>(result, pageable, total);
     }
