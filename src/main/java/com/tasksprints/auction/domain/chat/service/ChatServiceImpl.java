@@ -2,9 +2,11 @@ package com.tasksprints.auction.domain.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.domain.chat.dto.AddChatRoomDto;
+import com.tasksprints.auction.domain.chat.dto.MessageDto;
 import com.tasksprints.auction.domain.chat.model.ChatRoom;
 import com.tasksprints.auction.domain.chat.repository.ChatRoomRepository;
 import com.tasksprints.auction.domain.user.model.User;
+import com.tasksprints.auction.domain.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,21 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public boolean isUserOwner(String id, Long user) {
         return findOwnerById(id).getId().equals(user);
+    }
+
+    @Override
+    public void processMessage(String sender, MessageDto messageDto) {
+        switch (messageDto.getType()) {
+            case ENTER -> {
+                messageDto.setMessage(sender + "님이 입장하셨습니다.");
+                break;
+            }
+            case LEAVE -> {
+                messageDto.setMessage(sender + "님이 퇴장하셨습니다.");
+                break;
+            }
+            default -> messageDto.setMessage(sender + " : " + messageDto.getMessage());
+        }
     }
 
     @Transactional

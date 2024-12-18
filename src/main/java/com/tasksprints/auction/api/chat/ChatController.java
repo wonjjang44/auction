@@ -24,13 +24,7 @@ public class ChatController {
             return;
         } //메시지 전송자가 경매자라면 메시지 전송 금지
         String sender = userService.getUserDetailsById(messageDto.getSender()).getNickName();
-
-        if (MessageType.ENTER.equals(messageDto.getType())) {
-            messageDto.setMessage(sender + "님이 입장하셨습니다.");
-        }
-        if (MessageType.LEAVE.equals(messageDto.getType())) {
-            messageDto.setMessage(sender + "님이 퇴장하셨습니다.");
-        }
+        chatService.processMessage(sender, messageDto);
         simpMessageSendingOperations.convertAndSend("/topic/chat/room/" + messageDto.getRoomId(), messageDto);
     }
 
