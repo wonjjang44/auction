@@ -36,9 +36,6 @@ spring:
   profiles:
     include:
       -jwt
-
-  profiles:
-    include:
       -payment
 
 springdoc:
