@@ -1,4 +1,4 @@
-package com.tasksprints.auction.review.domain.service;
+package com.tasksprints.auction.review.application.service;
 
 import com.tasksprints.auction.review.domain.dto.request.ReviewRequest;
 import com.tasksprints.auction.review.domain.dto.response.ReviewResponse;

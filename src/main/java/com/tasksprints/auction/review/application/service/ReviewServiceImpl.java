@@ -1,8 +1,7 @@
-package com.tasksprints.auction.review.application;
+package com.tasksprints.auction.review.application.service;
 
 import com.tasksprints.auction.auction.domain.entity.Auction;
 import com.tasksprints.auction.auction.infrastructure.AuctionRepository;
-import com.tasksprints.auction.review.domain.service.ReviewService;
 import com.tasksprints.auction.review.domain.dto.request.ReviewRequest;
 import com.tasksprints.auction.review.domain.dto.response.ReviewResponse;
 import com.tasksprints.auction.review.domain.entity.Review;
