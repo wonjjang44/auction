@@ -36,4 +36,8 @@ public class ApiResponseMessages {
     public static final String LOGIN_SUCCESS = "Login Success";
 
     // Additional messages can be defined as needed
+
+    // PAYMENT
+    public static final String PAYMENT_PREPARED_SUCCESS = "Payment prepared successfully";
+    public static final String PAYMENT_SUCCESS = "Payment completed and wallet charged successfully";
 }

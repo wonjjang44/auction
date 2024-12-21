@@ -6,10 +6,15 @@ import com.tasksprints.auction.domain.user.dto.response.UserSummaryResponse;
 import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
 import com.tasksprints.auction.domain.user.model.User;
 import com.tasksprints.auction.domain.user.repository.UserRepository;
+import com.tasksprints.auction.domain.wallet.exception.WalletCreationException;
+import com.tasksprints.auction.domain.wallet.model.Wallet;
+import com.tasksprints.auction.domain.wallet.repository.WalletRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,5 +69,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("User not found with email " + email));
         return UserDetailResponse.of(user);
+
+    @Override
+    public User getUserById(Long id) {
+      return userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("User not found with id " + id));
+
     }
 }
