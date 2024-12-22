@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.tasksprints.auction.domain.auth.exception.AccessTokenException;
+import com.tasksprints.auction.auth.infrastructure.AccessTokenExtractor;
+import com.tasksprints.auction.auth.infrastructure.TokenExtractor;
+import com.tasksprints.auction.auth.exception.AccessTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

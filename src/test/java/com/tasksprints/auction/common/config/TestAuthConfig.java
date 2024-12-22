@@ -1,8 +1,8 @@
 package com.tasksprints.auction.common.config;
 
 import com.tasksprints.auction.common.jwt.JwtProvider;
-import com.tasksprints.auction.domain.auth.TokenExtractor;
-import com.tasksprints.auction.domain.auth.service.RefreshTokenCookieManager;
+import com.tasksprints.auction.auth.infrastructure.TokenExtractor;
+import com.tasksprints.auction.auth.application.RefreshTokenCookieManager;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 

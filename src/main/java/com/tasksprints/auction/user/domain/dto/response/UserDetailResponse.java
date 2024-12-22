@@ -1,0 +1,30 @@
+package com.tasksprints.auction.user.domain.dto.response;
+
+import com.tasksprints.auction.user.domain.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@AllArgsConstructor
+@Data
+public class UserDetailResponse {
+    private Long id;
+    private String name;
+    private String email;
+    private String password;
+    private String nickName;
+    private String walletId;
+
+    private UserDetailResponse(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.nickName = user.getNickName();
+        this.walletId = String.valueOf(user.getWallet().getId());
+    }
+
+    public static UserDetailResponse of(User user) {
+        return new UserDetailResponse(user);
+    }
+
+}

@@ -1,7 +1,7 @@
 package com.tasksprints.auction.common.jwt;
 
-import com.tasksprints.auction.domain.auth.exception.AuthException;
-import com.tasksprints.auction.domain.auth.model.Accessor;
+import com.tasksprints.auction.auth.exception.AuthException;
+import com.tasksprints.auction.auth.domain.model.Accessor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

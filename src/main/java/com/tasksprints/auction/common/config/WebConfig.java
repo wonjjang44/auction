@@ -1,7 +1,7 @@
 package com.tasksprints.auction.common.config;
 
-import com.tasksprints.auction.common.resolver.AuthenticationResolver;
-import com.tasksprints.auction.common.resolver.SearchConditionResolver;
+import com.tasksprints.auction.auction.application.resolver.SearchConditionResolver;
+import com.tasksprints.auction.auth.application.resolver.AuthenticationResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
