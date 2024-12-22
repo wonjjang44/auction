@@ -181,4 +181,43 @@ public class UserServiceImplTest {
             verify(userRepository, never()).delete(any(User.class));
         }
     }
+
+    @Nested
+    @DisplayName("Get User By Email")
+    class GetUserByEmailTests {
+
+        @Test
+        @DisplayName("Get user's detail information by email")
+        void shouldReturnUserWhenFound() {
+            // given
+            String findEmail = "test@example.com";
+            when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(existingUser));
+
+            // when
+            UserDetailResponse user = userService.getUserDetailByEmail(findEmail);
+
+            // then
+            Assertions.assertNotNull(user);
+            Assertions.assertEquals(existingUser.getId(), user.getId());
+            Assertions.assertEquals(existingUser.getName(), user.getName());
+            verify(userRepository, times(1)).findByEmail(findEmail);
+        }
+
+        @Test
+        @DisplayName("Should throw an exception if the user cannot be found by email")
+        void shouldThrowExceptionWhenUserNotFound() {
+            // given
+            String findEmail = "different@example.com";
+            when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+
+            // when
+            UserNotFoundException exception = Assertions.assertThrows(UserNotFoundException.class, () -> {
+                userService.getUserDetailByEmail(findEmail);
+            });
+
+            // then
+            Assertions.assertEquals("User not found with email " + findEmail, exception.getMessage());
+            verify(userRepository, times(1)).findByEmail(findEmail);
+        }
+    }
 }
