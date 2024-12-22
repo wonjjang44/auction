@@ -1,0 +1,107 @@
+package com.tasksprints.auction.bid.application.service;
+
+import com.tasksprints.auction.bid.application.service.BidService;
+import com.tasksprints.auction.bid.exception.BidNotFoundException;
+import com.tasksprints.auction.bid.exception.InvalidBidAmountException;
+import com.tasksprints.auction.bid.domain.entity.Bid;
+import com.tasksprints.auction.bid.infrastructure.BidRepository;
+import com.tasksprints.auction.auction.exception.AuctionEndedException;
+import com.tasksprints.auction.auction.exception.AuctionNotFoundException;
+import com.tasksprints.auction.auction.domain.entity.Auction;
+import com.tasksprints.auction.auction.infrastructure.AuctionRepository;
+import com.tasksprints.auction.bid.domain.dto.BidResponse;
+import com.tasksprints.auction.user.exception.UserNotFoundException;
+import com.tasksprints.auction.user.domain.entity.User;
+import com.tasksprints.auction.user.infrastructure.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * 실시간성으로 인해서 socket으로 대체할지에 대한 여부 고민 필요
+ */
+@Service
+@RequiredArgsConstructor
+public class BidServiceImpl implements BidService {
+
+    private final BidRepository bidRepository;
+    private final UserRepository userRepository;
+    private final AuctionRepository auctionRepository;
+
+    @Override
+    public BidResponse submitBid(Long userId, Long auctionId, BigDecimal amount) {
+        // 입찰 시 유효성 검사
+        User foundUser = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
+        Auction foundAuction = auctionRepository.findById(auctionId)
+            .orElseThrow(() -> new AuctionNotFoundException("Auction not found"));
+
+        // 경매가 종료되었는지 확인
+        if (foundAuction.getEndTime().isBefore(LocalDateTime.now())) {
+            throw new AuctionEndedException("This auction has already ended.");
+        }
+
+        // 최소 입찰 금액 충족 여부 확인
+        if (amount.compareTo(foundAuction.getStartingBid()) < 0) {
+            throw new InvalidBidAmountException("Bid amount is less than the minimum required bid amount.");
+        }
+
+        // 입찰 생성 및 저장
+        Bid createdBid = Bid.create(amount, foundUser, foundAuction);
+        Bid savedBid = bidRepository.save(createdBid);
+        return BidResponse.of(savedBid);
+    }
+
+    @Override
+    public BidResponse updateBidAmount(Long userId, Long auctionId, BigDecimal newAmount) {
+        // 기존 입찰을 찾습니다.
+        Bid foundBid = bidRepository.findByUserIdAndAuctionId(userId, auctionId)
+            .orElseThrow(() -> new BidNotFoundException("Bid not found"));
+
+        Auction foundAuction = foundBid.getAuction();
+
+        // 경매가 종료되었는지 확인합니다.
+        if (foundAuction.getEndTime().isBefore(LocalDateTime.now())) {
+            throw new AuctionEndedException("This auction has already ended.");
+        }
+
+        // 새로운 입찰 금액이 기존 금액보다 큰지 확인합니다.
+        if (newAmount.compareTo(foundBid.getAmount()) <= 0) {
+            throw new InvalidBidAmountException("New bid amount must be greater than the previous bid amount.");
+        }
+
+        // 새로운 입찰 금액이 최소 입찰 금액을 충족하는지 확인합니다.
+        if (newAmount.compareTo(foundAuction.getStartingBid()) < 0) {
+            throw new InvalidBidAmountException("Bid amount is less than the minimum required bid amount.");
+        }
+
+        // 입찰 금액 업데이트
+        foundBid.update(newAmount);
+        Bid updatedBid = bidRepository.save(foundBid);
+        return BidResponse.of(updatedBid);
+    }
+
+    @Override
+    public Boolean hasUserAlreadyBid(Long auctionId) {
+        List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+        return !bids.isEmpty();
+    }
+
+    @Override
+    public BidResponse getBidByUuid(String uuid) {
+        Bid bid = bidRepository.findByUuid(uuid)
+                .orElseThrow(() -> new BidNotFoundException("Bid not found"));
+        return BidResponse.of(bid);
+    }
+
+    @Override
+    public boolean isBidEnd(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId)
+            .orElseThrow(() -> new AuctionNotFoundException("Auction not found"));
+
+        return auction.getEndTime().isBefore(LocalDateTime.now());
+    }
+}

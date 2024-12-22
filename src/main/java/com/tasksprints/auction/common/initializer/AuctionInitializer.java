@@ -1,19 +1,18 @@
 package com.tasksprints.auction.common.initializer;
 
-import com.tasksprints.auction.domain.auction.model.Auction;
-import com.tasksprints.auction.domain.auction.model.AuctionCategory;
-import com.tasksprints.auction.domain.auction.model.AuctionStatus;
-import com.tasksprints.auction.domain.auction.repository.AuctionRepository;
-import com.tasksprints.auction.domain.product.model.Product;
-import com.tasksprints.auction.domain.product.model.ProductImage;
-import com.tasksprints.auction.domain.product.repository.ProductImageRepository;
-import com.tasksprints.auction.domain.product.repository.ProductRepository;
-import com.tasksprints.auction.domain.user.model.User;
-import com.tasksprints.auction.domain.user.repository.UserRepository;
+import com.tasksprints.auction.auction.domain.entity.Auction;
+import com.tasksprints.auction.auction.domain.entity.AuctionCategory;
+import com.tasksprints.auction.auction.domain.entity.AuctionStatus;
+import com.tasksprints.auction.auction.infrastructure.AuctionRepository;
+import com.tasksprints.auction.product.domain.entity.Product;
+import com.tasksprints.auction.product.domain.entity.ProductImage;
+import com.tasksprints.auction.product.infrastructure.ProductImageRepository;
+import com.tasksprints.auction.product.infrastructure.ProductRepository;
+import com.tasksprints.auction.user.domain.entity.User;
+import com.tasksprints.auction.user.infrastructure.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

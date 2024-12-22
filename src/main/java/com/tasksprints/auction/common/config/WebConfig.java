@@ -1,7 +1,7 @@
 package com.tasksprints.auction.common.config;
 
-import com.tasksprints.auction.common.resolver.SearchConditionResolver;
-import lombok.RequiredArgsConstructor;
+import com.tasksprints.auction.auction.application.resolver.SearchConditionResolver;
+import com.tasksprints.auction.auth.application.resolver.AuthenticationResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,14 +12,17 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final SearchConditionResolver searchConditionResolver;
+    private final AuthenticationResolver authenticationResolver;
 
-    public WebConfig(SearchConditionResolver searchConditionResolver) {
+    public WebConfig(SearchConditionResolver searchConditionResolver, AuthenticationResolver authenticationResolver) {
         this.searchConditionResolver = searchConditionResolver;
+        this.authenticationResolver = authenticationResolver;
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(searchConditionResolver);
+        resolvers.add(authenticationResolver);
     }
 
     @Override
