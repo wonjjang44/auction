@@ -1,10 +1,10 @@
 package com.tasksprints.auction.chat.presentation;
 
 import com.tasksprints.auction.chat.application.service.ChatService;
-import com.tasksprints.auction.chat.domain.annotation.WhisperValidation;
 import com.tasksprints.auction.chat.domain.dto.MessageDto;
 import com.tasksprints.auction.chat.domain.dto.WhisperDto;
 import com.tasksprints.auction.chat.domain.annotation.ChatValidation;
+import com.tasksprints.auction.chat.domain.annotation.WhisperValidation;
 import com.tasksprints.auction.user.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
