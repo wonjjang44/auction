@@ -1,17 +1,18 @@
 package com.tasksprints.auction.common.handler;
 
+import com.tasksprints.auction.auction.exception.AuctionAlreadyClosedException;
+import com.tasksprints.auction.auction.exception.AuctionEndedException;
+import com.tasksprints.auction.auction.exception.AuctionNotFoundException;
+import com.tasksprints.auction.auction.exception.InvalidAuctionTimeException;
+import com.tasksprints.auction.bid.exception.BidNotFoundException;
+import com.tasksprints.auction.bid.exception.InvalidBidAmountException;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
-import com.tasksprints.auction.domain.auction.exception.AuctionAlreadyClosedException;
-import com.tasksprints.auction.domain.auction.exception.AuctionEndedException;
-import com.tasksprints.auction.domain.auction.exception.AuctionNotFoundException;
-import com.tasksprints.auction.domain.auction.exception.InvalidAuctionTimeException;
-import com.tasksprints.auction.domain.bid.exception.BidNotFoundException;
-import com.tasksprints.auction.domain.bid.exception.InvalidBidAmountException;
-import com.tasksprints.auction.domain.payment.exception.InvalidSessionException;
-import com.tasksprints.auction.domain.payment.exception.PaymentDataMismatchException;
-import com.tasksprints.auction.domain.product.exception.ProductNotFoundException;
-import com.tasksprints.auction.domain.user.exception.UserNotFoundException;
+import com.tasksprints.auction.auth.exception.AuthException;
+import com.tasksprints.auction.payment.exception.InvalidSessionException;
+import com.tasksprints.auction.payment.exception.PaymentDataMismatchException;
+import com.tasksprints.auction.product.exception.ProductNotFoundException;
+import com.tasksprints.auction.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -88,5 +89,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResult<String>> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResult.failure(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ApiResult<String>> handleAuthException(AuthException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResult.failure(ApiResponseMessages.USER_NOT_FOUND));
     }
 }
