@@ -1,6 +1,6 @@
 package com.tasksprints.auction.common.config;
 
-import com.tasksprints.auction.auction.application.resolver.ChatValidationResolver;
+import com.tasksprints.auction.chat.application.resolver.ChatValidationResolver;
 import com.tasksprints.auction.auction.application.resolver.SearchConditionResolver;
 import com.tasksprints.auction.auth.application.resolver.AuthenticationResolver;
 import org.springframework.context.annotation.Configuration;
