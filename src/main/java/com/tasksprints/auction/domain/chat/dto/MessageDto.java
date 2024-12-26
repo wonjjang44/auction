@@ -4,7 +4,6 @@ import com.tasksprints.auction.domain.chat.annotation.ChatValidation;
 import lombok.*;
 
 @Data
-@ChatValidation
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageDto {

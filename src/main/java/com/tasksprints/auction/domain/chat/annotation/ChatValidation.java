@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE) //클래스 레벨에서 사용
+@Target({ElementType.PARAMETER, ElementType.TYPE}) //파라미터에서 사용
 @Retention(RetentionPolicy.RUNTIME) //런타임에 참조
 public @interface ChatValidation {
 }

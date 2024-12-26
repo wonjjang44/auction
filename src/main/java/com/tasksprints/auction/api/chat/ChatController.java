@@ -20,7 +20,7 @@ public class ChatController {
     private final ChatService chatService;
 
     @MessageMapping("/chat/message")
-    public void message(MessageDto messageDto) {
+    public void message(@ChatValidation MessageDto messageDto) {
         String sender = userService.getUserDetailsById(messageDto.getSender()).getNickName();
         chatService.processMessage(sender, messageDto);
         simpMessageSendingOperations.convertAndSend("/topic/chat/room/" + messageDto.getRoomId(), messageDto);
