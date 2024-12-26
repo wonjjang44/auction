@@ -1,8 +1,8 @@
 package com.tasksprints.auction.chat.application.resolver;
 
 import com.tasksprints.auction.chat.application.service.ChatService;
+import com.tasksprints.auction.chat.domain.annotation.ChatValidation;
 import com.tasksprints.auction.chat.domain.dto.MessageDto;
-import com.tasksprints.auction.domain.chat.annotation.ChatValidation;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

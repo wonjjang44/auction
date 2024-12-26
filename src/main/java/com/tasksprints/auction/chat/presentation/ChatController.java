@@ -1,9 +1,10 @@
 package com.tasksprints.auction.chat.presentation;
 
 import com.tasksprints.auction.chat.application.service.ChatService;
+import com.tasksprints.auction.chat.domain.annotation.WhisperValidation;
 import com.tasksprints.auction.chat.domain.dto.MessageDto;
 import com.tasksprints.auction.chat.domain.dto.WhisperDto;
-import com.tasksprints.auction.domain.chat.annotation.ChatValidation;
+import com.tasksprints.auction.chat.domain.annotation.ChatValidation;
 import com.tasksprints.auction.user.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,7 +27,7 @@ public class ChatController {
     }
 
     @MessageMapping("/chat/message/whisper")
-    public void messageToOne(WhisperDto whisperDto) {
+    public void messageToOne(@WhisperValidation WhisperDto whisperDto) {
         String sender = userService.getUserDetailsById(whisperDto.getSender()).getNickName();
         whisperDto.setMessage("[귓속말] " + sender + " : " + whisperDto.getMessage());
         simpMessageSendingOperations.convertAndSend("/whisper/" + whisperDto.getReceiver(), whisperDto);
