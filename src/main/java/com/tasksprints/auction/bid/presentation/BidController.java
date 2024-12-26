@@ -1,5 +1,6 @@
 package com.tasksprints.auction.bid.presentation;
 
+import com.tasksprints.auction.bid.application.annotation.BidValidation;
 import com.tasksprints.auction.bid.application.service.BidService;
 import com.tasksprints.auction.bid.domain.dto.BidRequest;
 import com.tasksprints.auction.bid.domain.dto.BidResponse;
@@ -33,19 +34,10 @@ public class BidController {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     @MessageMapping("/apply")
-    public void handleBid(BidRequest bidRequest) {
+    public void handleBid(@BidValidation BidRequest bidRequest) {
         /**
          * 입찰하는거 여기다가 추가하면 좋을 듯 합니다.
          */
-        UserDetailResponse userDetailResponse = userService.getUserDetailsById(bidRequest.getUserId());
-        if (chatService.isUserOwner(bidRequest.getChatRoomId(), userDetailResponse.getId())) {
-            return;
-        }
-
-        if (bidService.isBidEnd(bidRequest.getAuctionId())) {
-            return;
-        } //경매가 종료되었을 경우 채팅 입력 금지
-
         BidResponse bidResponse = bidService.updateBidAmount(bidRequest.getUserId(), bidRequest.getAuctionId(),
             bidRequest.getAmount());
         simpMessageSendingOperations.convertAndSend("/bid/" + bidResponse.getUuid(), bidResponse);
