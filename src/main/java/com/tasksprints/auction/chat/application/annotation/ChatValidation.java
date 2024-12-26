@@ -1,4 +1,4 @@
-package com.tasksprints.auction.chat.domain.annotation;
+package com.tasksprints.auction.chat.application.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
