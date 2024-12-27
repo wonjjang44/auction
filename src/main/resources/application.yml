@@ -35,8 +35,8 @@ spring:
     cache: false
   profiles:
     include:
-      -jwt
-      -payment
+      - jwt
+      - payment
 
 springdoc:
   api-docs:
@@ -50,8 +50,8 @@ springdoc:
 logging:
   level:
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    root: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    root: INFO
 server:
   port: 8080
 
