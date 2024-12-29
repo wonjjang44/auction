@@ -5,7 +5,9 @@ import com.tasksprints.auction.common.config.PaymentConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
+import com.tasksprints.auction.domain.payment.dto.request.TransactionRequest;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
+import com.tasksprints.auction.domain.payment.dto.response.TransactionResponse;
 import com.tasksprints.auction.domain.payment.exception.InvalidSessionException;
 import com.tasksprints.auction.domain.payment.exception.PaymentDataMismatchException;
 import com.tasksprints.auction.domain.payment.exception.PaymentDetailSearchFailException;
@@ -15,9 +17,11 @@ import com.tasksprints.auction.domain.user.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,7 @@ import java.net.http.HttpResponse;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/payment")
+@Slf4j
 public class PaymentController {
     private final PaymentConfig paymentConfig;
     private final PaymentService paymentService;
@@ -94,12 +99,12 @@ public class PaymentController {
 
 
     @PostMapping("/detail/key/{paymentKey}")
-    @Operation(summary = "paymenyKey를 사용한 결제 상세 조회 API 호출", description = "paymentKey를 사용하여 결제 정보 상세 조회 API를 호출한다")
+    @Operation(summary = "paymentKey를 사용한 결제 상세 조회 API 호출", description = "paymentKey를 사용하여 결제 정보 상세 조회 API를 호출한다")
     @ApiResponse(responseCode = "200", description = "paymentKey를 사용한 결제 상세 조회 API 호출 성공")
     public ResponseEntity<?> detailPaymentUsePaymentKey(@Parameter(description = "paymentKey 값") @RequestBody PaymentRequest.Detail paymentRequest) {
         // Service 단에서 호출한 tosspayments API 로직 호출
         PaymentResponse.Detail payment = paymentService.detailPayments(paymentRequest);
-        System.out.println("payment = " + payment);
+        log.debug("payment => {}" + payment);
 
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_DETAIL_SUCCESS, payment));
     }
@@ -111,10 +116,24 @@ public class PaymentController {
     public ResponseEntity<?> detailPaymentUseOrderId(@Parameter(description = "orderId 값") @RequestBody PaymentRequest.Detail paymentRequest) {
         // Service 단에서 호출한 tosspayments API 로직 호출
         PaymentResponse.Detail payment = paymentService.detailPayments(paymentRequest);
-        System.out.println("payment = " + payment);
+        log.debug("payment => {}" + payment);
 
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.PAYMENT_DETAIL_SUCCESS, payment));
     }
+
+
+    @PostMapping("/transactions")
+    @Operation(summary = "거래 리스트 조회", description = "결제 승인, 취소, 부분 취소 내역 조회 API 호출")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "결제 내역 조회 성공"),
+        @ApiResponse(responseCode = "404", description = "결제 내역이 존재하지 않습니다.")
+    })
+    public ResponseEntity<ApiResult<TransactionResponse>> getTransactionList(@RequestBody TransactionRequest transactionRequest) {
+        TransactionResponse transactionList = paymentService.getTransactionList(transactionRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResult.success("결제 내역 조회 성공", transactionList));
+    }
+
 
 
 

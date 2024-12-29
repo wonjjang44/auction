@@ -2,7 +2,9 @@ package com.tasksprints.auction.domain.payment.service;
 
 
 import com.tasksprints.auction.domain.payment.dto.request.PaymentRequest;
+import com.tasksprints.auction.domain.payment.dto.request.TransactionRequest;
 import com.tasksprints.auction.domain.payment.dto.response.PaymentResponse;
+import com.tasksprints.auction.domain.payment.dto.response.TransactionResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -15,4 +17,6 @@ public interface PaymentService {
     public HttpResponse<String> requestConfirm(HttpClient httpClient, PaymentRequest.Confirm confirmRequest) throws IOException, InterruptedException;
 
     PaymentResponse.Detail detailPayments(PaymentRequest.Detail paymentRequest);
+
+    TransactionResponse getTransactionList(TransactionRequest transactionRequest);
 }
