@@ -3,6 +3,7 @@ package com.tasksprints.auction.auction.presentation;
 import com.tasksprints.auction.auction.domain.dto.request.AuctionRequest;
 import com.tasksprints.auction.auction.domain.dto.response.AuctionResponse;
 import com.tasksprints.auction.auction.application.service.AuctionService;
+import com.tasksprints.auction.common.constant.ApiResponseMessage;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
 import com.tasksprints.auction.product.domain.entity.ProductCategory;
@@ -96,6 +97,14 @@ public class AuctionController {
     public ResponseEntity<ApiResult<AuctionResponse>> getAuctionById(@PathVariable Long auctionId) {
         AuctionResponse auction = auctionService.getAuctionById(auctionId);
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.AUCTION_RETRIEVED, auction));
+    }
+
+    @GetMapping("/{auctionId}/seconds")
+    @Operation(summary = "Get auction by ID seconds", description = "Retrieves auction details by its ID.")
+    @ApiResponse(responseCode = "200", description = "Auction retrieved successfully")
+    @ApiResponseMessage(ApiResponseMessages.AUCTION_RETRIEVED)
+    public AuctionResponse getAuctionByIdSeconds(@PathVariable Long auctionId) {
+        return auctionService.getAuctionById(auctionId);
     }
 
     @Deprecated
