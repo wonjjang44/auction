@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -82,6 +83,14 @@ public class BidController {
     @ApiResponse(responseCode = "200", description = "Bid status retrieved successfully")
     public ResponseEntity<ApiResult<BidResponse>> getBidByUuid(@PathVariable(value = "uuid") String uuid) {
         BidResponse bid = bidService.getBidByUuid(uuid);
-        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.AUCTION_RETRIEVED, bid));
+        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_RETRIEVED, bid));
+    }
+
+    @GetMapping()
+    @Operation(summary = "Get All bids", description = "Get All bids")
+    @ApiResponse(responseCode = "200", description = "All bids retrieved successfully")
+    public ResponseEntity<ApiResult<List<BidResponse>>> getAllBids() {
+        List<BidResponse> bids = bidService.findAllBids();
+        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.ALL_BIDS_RETRIEVED, bids));
     }
 }

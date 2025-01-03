@@ -104,4 +104,11 @@ public class BidServiceImpl implements BidService {
 
         return auction.getEndTime().isBefore(LocalDateTime.now());
     }
+
+    @Override
+    public List<BidResponse> findAllBids() {
+        return bidRepository.findAll()
+            .stream().map(BidResponse::of)
+            .toList();
+    }
 }
