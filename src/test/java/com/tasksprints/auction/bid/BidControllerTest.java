@@ -5,6 +5,7 @@ import com.tasksprints.auction.BaseControllerTest;
 import com.tasksprints.auction.bid.domain.dto.BidResponse;
 import com.tasksprints.auction.bid.application.service.BidService;
 import com.tasksprints.auction.bid.presentation.BidController;
+import com.tasksprints.auction.common.config.TestMockResolverConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.chat.application.service.ChatService;
 import com.tasksprints.auction.user.application.service.UserService;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BidController.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@Import(TestMockResolverConfig.class)
 public class BidControllerTest extends BaseControllerTest {
 
     @Autowired

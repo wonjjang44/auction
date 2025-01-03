@@ -2,6 +2,7 @@ package com.tasksprints.auction.user.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.BaseControllerTest;
+import com.tasksprints.auction.common.config.TestMockResolverConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.user.domain.dto.request.UserRequest;
 import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@Import(TestMockResolverConfig.class)
 class UserControllerTest extends BaseControllerTest {
 
     @Autowired

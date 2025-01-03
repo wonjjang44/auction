@@ -1,6 +1,7 @@
 package com.tasksprints.auction.payment.presentation;
 
 import com.tasksprints.auction.BaseControllerTest;
+import com.tasksprints.auction.common.config.TestMockResolverConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.payment.api.Response;
 import com.tasksprints.auction.payment.domain.dto.response.PaymentErrorResponse;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -32,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PaymentController.class)
 @MockBean(JpaMetamodelMappingContext.class)
-
+@Import(TestMockResolverConfig.class)
 public class PaymentControllerTest extends BaseControllerTest {
     @Autowired
     private MockMvc mockMvc;
