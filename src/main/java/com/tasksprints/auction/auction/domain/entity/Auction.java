@@ -54,6 +54,7 @@ public class Auction extends BaseEntity {
     @Builder.Default
     private List<Bid> bids = new ArrayList<>();
 
+    @Builder.Default //초기화 값 적용 위함 -> @Builder만 사용할 경우 초기화 값이 무시될 가능성 존재
     @Column(nullable = false)
     private long viewCount = 0L;
 
@@ -82,6 +83,4 @@ public class Auction extends BaseEntity {
     public void incrementViewCount() {
         this.viewCount += 1;
     }
-
-
 }
