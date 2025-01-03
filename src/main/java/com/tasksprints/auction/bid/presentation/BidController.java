@@ -63,7 +63,7 @@ public class BidController {
         @Parameter(description = "auctionId") @RequestParam Long auctionId,
         @Parameter(description = "ID of the user updating the bid") @RequestParam Long userId,
         @Parameter(description = "New bid amount") @RequestParam BigDecimal amount) {
-        log.info("a");
+        log.info("a"); //삭제 필요
         BidResponse updatedBid = bidService.updateBidAmount(userId, auctionId, amount);
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_UPDATED_SUCCESS, updatedBid));
     }
