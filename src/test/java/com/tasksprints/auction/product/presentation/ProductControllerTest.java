@@ -2,6 +2,7 @@ package com.tasksprints.auction.product.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.BaseControllerTest;
+import com.tasksprints.auction.common.config.TestMockResolverConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.product.domain.dto.request.ProductRequest;
 import com.tasksprints.auction.product.domain.dto.response.ProductResponse;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ProductController.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@Import(TestMockResolverConfig.class)
 public class ProductControllerTest extends BaseControllerTest {
 
     @Autowired
