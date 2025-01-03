@@ -1,20 +1,17 @@
 package com.tasksprints.auction.chat.domain.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class WhisperDto {
 
     private String roomId;
-    private Long sender;
-    private Long receiver;
+    private long sender;
+    private long receiver;
     private String message;
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

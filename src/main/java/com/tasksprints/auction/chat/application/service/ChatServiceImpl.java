@@ -1,9 +1,12 @@
 package com.tasksprints.auction.chat.application.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tasksprints.auction.chat.domain.dto.AddChatRoomDto;
+
+import com.tasksprints.auction.chat.domain.dto.ChatRoomResponse;
+import com.tasksprints.auction.chat.domain.dto.MessageDto;
 import com.tasksprints.auction.chat.domain.model.ChatRoom;
 import com.tasksprints.auction.chat.infrastructure.ChatRoomRepository;
+import com.tasksprints.auction.user.domain.dto.response.UserResponse;
 import com.tasksprints.auction.user.domain.entity.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -29,18 +32,22 @@ public class ChatServiceImpl implements ChatService {
         chatRoomMap = new ConcurrentHashMap<>();
     }
 
+    @Transactional
     @Override
-    public List<ChatRoom> findAllRoom() {
-        return new ArrayList<>(chatRoomMap.values());
+    public List<ChatRoomResponse> findAllRoom() {
+        List<ChatRoom> chatRooms = new ArrayList<>(chatRoomMap.values());
+        return chatRooms.stream().map(ChatRoomResponse::of).toList();
+    }
+
+    @Transactional
+    @Override
+    public ChatRoomResponse findRoomById(String id) {
+        ChatRoom chatRoom = chatRoomMap.get(id);
+        return ChatRoomResponse.of(chatRoom);
     }
 
     @Override
-    public ChatRoom findRoomById(String id) {
-        return chatRoomMap.get(id);
-    }
-
-    @Override
-    public User findOwnerById(String id) {
+    public UserResponse findOwnerById(String id) {
         return findRoomById(id).getOwner();
     }
 
@@ -49,10 +56,29 @@ public class ChatServiceImpl implements ChatService {
         return findOwnerById(id).getId().equals(user);
     }
 
+    @Override
+    public void processMessage(String sender, MessageDto messageDto) {
+        switch (messageDto.getType()) {
+            case ENTER -> {
+                messageDto.setMessage(sender + "님이 입장하셨습니다.");
+                break;
+            }
+            case LEAVE -> {
+                messageDto.setMessage(sender + "님이 퇴장하셨습니다.");
+                break;
+            }
+            default -> messageDto.setMessage(sender + " : " + messageDto.getMessage());
+        }
+    }
+
     @Transactional
     @Override
-    public void createRoom(AddChatRoomDto addChatRoomDto) {
-        ChatRoom chatRoom = chatRoomRepository.save(addChatRoomDto.toEntity());
+    public void createRoom(String name, User owner) {
+        ChatRoom chatRoom = ChatRoom.builder()
+            .name(name)
+            .owner(owner)
+            .build();
+        chatRoomRepository.save(chatRoom);
         log.info("Create Room : {} {}", chatRoom.getId(), chatRoom.getName());
         chatRoomMap.put(chatRoom.getChatRoomId(), chatRoom);
     }

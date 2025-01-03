@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class ClockConfig {
     @Bean
     public Clock clock() {
-        return Clock.system(ZoneId.of("Asia/seoul"));
+        return Clock.system(ZoneId.of("Asia/Seoul"));
     }
 }

@@ -1,11 +1,8 @@
 package com.tasksprints.auction.chat.domain.dto;
 
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageDto {
@@ -18,7 +15,7 @@ public class MessageDto {
     private Long sender;
     private String message;
 
-    public void setMessage(String s) {
-        this.message = s;
+    public void setType(String type) {
+        this.type = MessageType.valueOf(type);
     }
 }

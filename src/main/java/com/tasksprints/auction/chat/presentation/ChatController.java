@@ -1,7 +1,10 @@
 package com.tasksprints.auction.chat.presentation;
+
 import com.tasksprints.auction.chat.application.service.ChatService;
 import com.tasksprints.auction.chat.domain.dto.MessageDto;
 import com.tasksprints.auction.chat.domain.dto.WhisperDto;
+import com.tasksprints.auction.chat.application.annotation.ChatValidation;
+import com.tasksprints.auction.chat.application.annotation.WhisperValidation;
 import com.tasksprints.auction.user.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,27 +20,14 @@ public class ChatController {
     private final ChatService chatService;
 
     @MessageMapping("/chat/message")
-    public void message(MessageDto messageDto) {
-        if (chatService.isUserOwner(messageDto.getRoomId(), messageDto.getSender())) {
-            return;
-        } //메시지 전송자가 경매자라면 메시지 전송 금지
+    public void message(@ChatValidation MessageDto messageDto) {
         String sender = userService.getUserDetailsById(messageDto.getSender()).getNickName();
-
-        if (MessageDto.MessageType.ENTER.equals(messageDto.getType())) {
-            messageDto.setMessage(sender + "님이 입장하셨습니다.");
-        }
-        if (MessageDto.MessageType.LEAVE.equals(messageDto.getType())) {
-            messageDto.setMessage(sender + "님이 퇴장하셨습니다.");
-        }
+        chatService.processMessage(sender, messageDto);
         simpMessageSendingOperations.convertAndSend("/topic/chat/room/" + messageDto.getRoomId(), messageDto);
     }
 
     @MessageMapping("/chat/message/whisper")
-    public void messageToOne(WhisperDto whisperDto) {
-        if (chatService.isUserOwner(whisperDto.getRoomId(), whisperDto.getSender())) {
-            return;
-        } //메시지 전송자가 경매자라면 메시지 전송 금지
-
+    public void messageToOne(@WhisperValidation WhisperDto whisperDto) {
         String sender = userService.getUserDetailsById(whisperDto.getSender()).getNickName();
         whisperDto.setMessage("[귓속말] " + sender + " : " + whisperDto.getMessage());
         simpMessageSendingOperations.convertAndSend("/whisper/" + whisperDto.getReceiver(), whisperDto);

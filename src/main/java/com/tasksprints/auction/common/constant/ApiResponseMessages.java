@@ -24,6 +24,8 @@ public class ApiResponseMessages {
     public static final String BID_SUBMITTED_SUCCESS = "Bid successfully submitted";
     public static final String BID_UPDATED_SUCCESS = "Bid amount successfully updated";
     public static final String BID_STATUS_CHECKED = "Bid status successfully checked";
+    public static final String ALL_BIDS_RETRIEVED = "All bids successfully retrieved";
+    public static final String BID_RETRIEVED = "Bid successfully retrieved";
 
     // REVIEW
     public static final String REVIEW_CREATED_SUCCESS = "Review successfully created";
