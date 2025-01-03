@@ -2,9 +2,11 @@ package com.tasksprints.auction.chat.application.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.tasksprints.auction.chat.domain.dto.ChatRoomResponse;
 import com.tasksprints.auction.chat.domain.dto.MessageDto;
 import com.tasksprints.auction.chat.domain.model.ChatRoom;
 import com.tasksprints.auction.chat.infrastructure.ChatRoomRepository;
+import com.tasksprints.auction.user.domain.dto.response.UserResponse;
 import com.tasksprints.auction.user.domain.entity.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -30,18 +32,22 @@ public class ChatServiceImpl implements ChatService {
         chatRoomMap = new ConcurrentHashMap<>();
     }
 
+    @Transactional
     @Override
-    public List<ChatRoom> findAllRoom() {
-        return new ArrayList<>(chatRoomMap.values());
+    public List<ChatRoomResponse> findAllRoom() {
+        List<ChatRoom> chatRooms = new ArrayList<>(chatRoomMap.values());
+        return chatRooms.stream().map(ChatRoomResponse::of).toList();
+    }
+
+    @Transactional
+    @Override
+    public ChatRoomResponse findRoomById(String id) {
+        ChatRoom chatRoom = chatRoomMap.get(id);
+        return ChatRoomResponse.of(chatRoom);
     }
 
     @Override
-    public ChatRoom findRoomById(String id) {
-        return chatRoomMap.get(id);
-    }
-
-    @Override
-    public User findOwnerById(String id) {
+    public UserResponse findOwnerById(String id) {
         return findRoomById(id).getOwner();
     }
 
