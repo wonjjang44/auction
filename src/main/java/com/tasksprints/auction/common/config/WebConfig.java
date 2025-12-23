@@ -1,5 +1,6 @@
 package com.tasksprints.auction.common.config;
 
+import com.tasksprints.auction.chat.application.resolver.ChatValidationResolver;
 import com.tasksprints.auction.auction.application.resolver.SearchConditionResolver;
 import com.tasksprints.auction.auth.application.resolver.AuthenticationResolver;
 import org.springframework.context.annotation.Configuration;
@@ -12,16 +13,19 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final SearchConditionResolver searchConditionResolver;
+    private final ChatValidationResolver chatValidationResolver;
     private final AuthenticationResolver authenticationResolver;
 
-    public WebConfig(SearchConditionResolver searchConditionResolver, AuthenticationResolver authenticationResolver) {
+    public WebConfig(SearchConditionResolver searchConditionResolver, ChatValidationResolver chatValidationResolver, AuthenticationResolver authenticationResolver) {
         this.searchConditionResolver = searchConditionResolver;
+        this.chatValidationResolver = chatValidationResolver;
         this.authenticationResolver = authenticationResolver;
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(searchConditionResolver);
+        resolvers.add(chatValidationResolver);
         resolvers.add(authenticationResolver);
     }
 

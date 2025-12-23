@@ -1,31 +1,28 @@
 package com.tasksprints.auction.bid.presentation;
 
+import com.tasksprints.auction.bid.application.annotation.BidValidation;
+import com.tasksprints.auction.bid.application.service.BidService;
 import com.tasksprints.auction.bid.domain.dto.BidRequest;
 import com.tasksprints.auction.bid.domain.dto.BidResponse;
-import com.tasksprints.auction.bid.application.service.BidService;
 import com.tasksprints.auction.chat.application.service.ChatService;
-import com.tasksprints.auction.chat.domain.dto.AddChatRoomDto;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.common.response.ApiResult;
+import com.tasksprints.auction.user.application.service.UserService;
 import com.tasksprints.auction.user.domain.dto.response.UserDetailResponse;
 import com.tasksprints.auction.user.domain.entity.User;
-import com.tasksprints.auction.user.application.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,19 +35,10 @@ public class BidController {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     @MessageMapping("/apply")
-    public void handleBid(BidRequest bidRequest) {
+    public void handleBid(@BidValidation BidRequest bidRequest) {
         /**
          * 입찰하는거 여기다가 추가하면 좋을 듯 합니다.
          */
-        UserDetailResponse userDetailResponse = userService.getUserDetailsById(bidRequest.getUserId());
-        if (chatService.isUserOwner(bidRequest.getChatRoomId(), userDetailResponse.getId())) {
-            return;
-        }
-
-        if (bidService.isBidEnd(bidRequest.getAuctionId())) {
-            return;
-        } //경매가 종료되었을 경우 채팅 입력 금지
-
         BidResponse bidResponse = bidService.updateBidAmount(bidRequest.getUserId(), bidRequest.getAuctionId(),
             bidRequest.getAmount());
         simpMessageSendingOperations.convertAndSend("/bid/" + bidResponse.getUuid(), bidResponse);
@@ -65,7 +53,7 @@ public class BidController {
         @Parameter(description = "Bid amount") @RequestParam BigDecimal amount) {
         BidResponse bid = bidService.submitBid(userId, auctionId, amount);
         User user = userService.getUserById(userId);
-        chatService.createRoom(new AddChatRoomDto(bid.getName(), user)); //입찰 생성 시 채팅방 생성 후 저장
+        chatService.createRoom(bid.getName(), user); //입찰 생성 시 채팅방 생성 후 저장
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_SUBMITTED_SUCCESS, bid));
     }
 
@@ -76,7 +64,7 @@ public class BidController {
         @Parameter(description = "auctionId") @RequestParam Long auctionId,
         @Parameter(description = "ID of the user updating the bid") @RequestParam Long userId,
         @Parameter(description = "New bid amount") @RequestParam BigDecimal amount) {
-        log.info("a");
+        log.info("a"); //삭제 필요
         BidResponse updatedBid = bidService.updateBidAmount(userId, auctionId, amount);
         return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_UPDATED_SUCCESS, updatedBid));
     }
@@ -95,6 +83,14 @@ public class BidController {
     @ApiResponse(responseCode = "200", description = "Bid status retrieved successfully")
     public ResponseEntity<ApiResult<BidResponse>> getBidByUuid(@PathVariable(value = "uuid") String uuid) {
         BidResponse bid = bidService.getBidByUuid(uuid);
-        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.AUCTION_RETRIEVED, bid));
+        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.BID_RETRIEVED, bid));
+    }
+
+    @GetMapping()
+    @Operation(summary = "Get All bids", description = "Get All bids")
+    @ApiResponse(responseCode = "200", description = "All bids retrieved successfully")
+    public ResponseEntity<ApiResult<List<BidResponse>>> getAllBids() {
+        List<BidResponse> bids = bidService.findAllBids();
+        return ResponseEntity.ok(ApiResult.success(ApiResponseMessages.ALL_BIDS_RETRIEVED, bids));
     }
 }

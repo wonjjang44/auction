@@ -3,6 +3,7 @@ package com.tasksprints.auction.bid.application.service;
 import com.tasksprints.auction.bid.domain.dto.BidResponse;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface BidService {
     /**
@@ -18,4 +19,6 @@ public interface BidService {
     BidResponse getBidByUuid(String uuid);
 
     boolean isBidEnd(Long auctionId);
+
+    List<BidResponse> findAllBids();
 }

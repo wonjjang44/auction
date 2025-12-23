@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -24,6 +25,7 @@ public class BidResponse {
             .name(bid.getUser().getName())
             .auctionId(bid.getAuction().getId())
             .amount(bid.getAmount())
+            .uuid(bid.getUuid())
             .build();
         /** 아이템 목록 추가**/
     }

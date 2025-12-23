@@ -1,21 +1,23 @@
 package com.tasksprints.auction.chat.application.service;
 
-
-import com.tasksprints.auction.chat.domain.dto.AddChatRoomDto;
-import com.tasksprints.auction.chat.domain.model.ChatRoom;
+import com.tasksprints.auction.chat.domain.dto.ChatRoomResponse;
+import com.tasksprints.auction.chat.domain.dto.MessageDto;
+import com.tasksprints.auction.user.domain.dto.response.UserResponse;
 import com.tasksprints.auction.user.domain.entity.User;
 
 import java.util.List;
 
 public interface ChatService {
 
-    List<ChatRoom> findAllRoom();
+    List<ChatRoomResponse> findAllRoom();
 
-    ChatRoom findRoomById(String id);
+    ChatRoomResponse findRoomById(String id);
 
-    User findOwnerById(String id);
+    UserResponse findOwnerById(String id);
 
     boolean isUserOwner(String id, Long user);
 
-    void createRoom(AddChatRoomDto addChatRoomDto);
+    void processMessage(String sender, MessageDto messageDto);
+
+    void createRoom(String name, User owner);
 }

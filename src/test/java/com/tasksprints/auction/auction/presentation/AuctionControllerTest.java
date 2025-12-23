@@ -2,6 +2,10 @@ package com.tasksprints.auction.auction.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasksprints.auction.BaseControllerTest;
+import com.tasksprints.auction.bid.application.resolver.BidValidationResolver;
+import com.tasksprints.auction.chat.application.resolver.ChatValidationResolver;
+import com.tasksprints.auction.chat.application.resolver.WhisperValidationResolver;
+import com.tasksprints.auction.common.config.TestMockResolverConfig;
 import com.tasksprints.auction.common.constant.ApiResponseMessages;
 import com.tasksprints.auction.auction.domain.dto.request.AuctionRequest;
 import com.tasksprints.auction.auction.domain.dto.response.AuctionResponse;
@@ -18,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AuctionController.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@Import(TestMockResolverConfig.class)
 public class AuctionControllerTest extends BaseControllerTest {
 
     @Autowired
@@ -46,9 +52,6 @@ public class AuctionControllerTest extends BaseControllerTest {
 
     @MockBean
     private AuctionService auctionService;
-
-    @MockBean
-    private BidService bidService;
 
     @MockBean
     private ReviewService reviewService;

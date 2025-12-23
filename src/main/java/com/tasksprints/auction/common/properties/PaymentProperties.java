@@ -2,6 +2,7 @@ package com.tasksprints.auction.common.properties;
 
 import lombok.Getter;
 
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import java.util.Base64;
 @Component
 @ConfigurationProperties(prefix = "payment.toss")
 @Getter
+@Setter
 public class PaymentProperties {
     private String testClientApiKey;
     private String testSecretApiKey;
